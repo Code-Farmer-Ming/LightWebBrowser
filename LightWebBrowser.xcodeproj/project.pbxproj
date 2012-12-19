@@ -1,0 +1,477 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3A96DA0916819A9C000C2C87 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A96DA0816819A9C000C2C87 /* UIKit.framework */; };
+		3A96DA0B16819A9C000C2C87 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A96DA0A16819A9C000C2C87 /* Foundation.framework */; };
+		3A96DA0D16819A9C000C2C87 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A96DA0C16819A9C000C2C87 /* CoreGraphics.framework */; };
+		3A96DA1316819A9C000C2C87 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A96DA1116819A9C000C2C87 /* InfoPlist.strings */; };
+		3A96DA1516819A9C000C2C87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A96DA1416819A9C000C2C87 /* main.m */; };
+		3A96DA1916819A9C000C2C87 /* ASTONAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A96DA1816819A9C000C2C87 /* ASTONAppDelegate.m */; };
+		3A96DA1B16819A9C000C2C87 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A96DA1A16819A9C000C2C87 /* Default.png */; };
+		3A96DA1D16819A9C000C2C87 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A96DA1C16819A9C000C2C87 /* Default@2x.png */; };
+		3A96DA1F16819A9C000C2C87 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A96DA1E16819A9C000C2C87 /* Default-568h@2x.png */; };
+		3A96DA2216819A9C000C2C87 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A96DA2016819A9C000C2C87 /* MainStoryboard_iPhone.storyboard */; };
+		3A96DA2516819A9C000C2C87 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A96DA2316819A9C000C2C87 /* MainStoryboard_iPad.storyboard */; };
+		3A96DA2816819A9C000C2C87 /* ASTONViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A96DA2716819A9C000C2C87 /* ASTONViewController.m */; };
+		3A96DA3016819A9C000C2C87 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A96DA2F16819A9C000C2C87 /* SenTestingKit.framework */; };
+		3A96DA3116819A9D000C2C87 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A96DA0816819A9C000C2C87 /* UIKit.framework */; };
+		3A96DA3216819A9D000C2C87 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A96DA0A16819A9C000C2C87 /* Foundation.framework */; };
+		3A96DA3A16819A9D000C2C87 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A96DA3816819A9D000C2C87 /* InfoPlist.strings */; };
+		3A96DA3D16819A9D000C2C87 /* LightWebBrowserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A96DA3C16819A9D000C2C87 /* LightWebBrowserTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3A96DA3316819A9D000C2C87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A96D9FB16819A9C000C2C87 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3A96DA0316819A9C000C2C87;
+			remoteInfo = LightWebBrowser;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3A96DA0416819A9C000C2C87 /* LightWebBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightWebBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A96DA0816819A9C000C2C87 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		3A96DA0A16819A9C000C2C87 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3A96DA0C16819A9C000C2C87 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		3A96DA1016819A9C000C2C87 /* LightWebBrowser-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LightWebBrowser-Info.plist"; sourceTree = "<group>"; };
+		3A96DA1216819A9C000C2C87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3A96DA1416819A9C000C2C87 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3A96DA1616819A9C000C2C87 /* LightWebBrowser-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LightWebBrowser-Prefix.pch"; sourceTree = "<group>"; };
+		3A96DA1716819A9C000C2C87 /* ASTONAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASTONAppDelegate.h; sourceTree = "<group>"; };
+		3A96DA1816819A9C000C2C87 /* ASTONAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ASTONAppDelegate.m; sourceTree = "<group>"; };
+		3A96DA1A16819A9C000C2C87 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		3A96DA1C16819A9C000C2C87 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		3A96DA1E16819A9C000C2C87 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		3A96DA2116819A9C000C2C87 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		3A96DA2416819A9C000C2C87 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		3A96DA2616819A9C000C2C87 /* ASTONViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASTONViewController.h; sourceTree = "<group>"; };
+		3A96DA2716819A9C000C2C87 /* ASTONViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ASTONViewController.m; sourceTree = "<group>"; };
+		3A96DA2E16819A9C000C2C87 /* LightWebBrowserTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LightWebBrowserTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A96DA2F16819A9C000C2C87 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		3A96DA3716819A9D000C2C87 /* LightWebBrowserTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LightWebBrowserTests-Info.plist"; sourceTree = "<group>"; };
+		3A96DA3916819A9D000C2C87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3A96DA3B16819A9D000C2C87 /* LightWebBrowserTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LightWebBrowserTests.h; sourceTree = "<group>"; };
+		3A96DA3C16819A9D000C2C87 /* LightWebBrowserTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LightWebBrowserTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3A96DA0116819A9C000C2C87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A96DA0916819A9C000C2C87 /* UIKit.framework in Frameworks */,
+				3A96DA0B16819A9C000C2C87 /* Foundation.framework in Frameworks */,
+				3A96DA0D16819A9C000C2C87 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A96DA2A16819A9C000C2C87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A96DA3016819A9C000C2C87 /* SenTestingKit.framework in Frameworks */,
+				3A96DA3116819A9D000C2C87 /* UIKit.framework in Frameworks */,
+				3A96DA3216819A9D000C2C87 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3A96D9F916819A9C000C2C87 = {
+			isa = PBXGroup;
+			children = (
+				3A96DA0E16819A9C000C2C87 /* LightWebBrowser */,
+				3A96DA3516819A9D000C2C87 /* LightWebBrowserTests */,
+				3A96DA0716819A9C000C2C87 /* Frameworks */,
+				3A96DA0516819A9C000C2C87 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3A96DA0516819A9C000C2C87 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3A96DA0416819A9C000C2C87 /* LightWebBrowser.app */,
+				3A96DA2E16819A9C000C2C87 /* LightWebBrowserTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3A96DA0716819A9C000C2C87 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3A96DA0816819A9C000C2C87 /* UIKit.framework */,
+				3A96DA0A16819A9C000C2C87 /* Foundation.framework */,
+				3A96DA0C16819A9C000C2C87 /* CoreGraphics.framework */,
+				3A96DA2F16819A9C000C2C87 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3A96DA0E16819A9C000C2C87 /* LightWebBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				3A96DA1716819A9C000C2C87 /* ASTONAppDelegate.h */,
+				3A96DA1816819A9C000C2C87 /* ASTONAppDelegate.m */,
+				3A96DA2016819A9C000C2C87 /* MainStoryboard_iPhone.storyboard */,
+				3A96DA2316819A9C000C2C87 /* MainStoryboard_iPad.storyboard */,
+				3A96DA2616819A9C000C2C87 /* ASTONViewController.h */,
+				3A96DA2716819A9C000C2C87 /* ASTONViewController.m */,
+				3A96DA0F16819A9C000C2C87 /* Supporting Files */,
+			);
+			path = LightWebBrowser;
+			sourceTree = "<group>";
+		};
+		3A96DA0F16819A9C000C2C87 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3A96DA1016819A9C000C2C87 /* LightWebBrowser-Info.plist */,
+				3A96DA1116819A9C000C2C87 /* InfoPlist.strings */,
+				3A96DA1416819A9C000C2C87 /* main.m */,
+				3A96DA1616819A9C000C2C87 /* LightWebBrowser-Prefix.pch */,
+				3A96DA1A16819A9C000C2C87 /* Default.png */,
+				3A96DA1C16819A9C000C2C87 /* Default@2x.png */,
+				3A96DA1E16819A9C000C2C87 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3A96DA3516819A9D000C2C87 /* LightWebBrowserTests */ = {
+			isa = PBXGroup;
+			children = (
+				3A96DA3B16819A9D000C2C87 /* LightWebBrowserTests.h */,
+				3A96DA3C16819A9D000C2C87 /* LightWebBrowserTests.m */,
+				3A96DA3616819A9D000C2C87 /* Supporting Files */,
+			);
+			path = LightWebBrowserTests;
+			sourceTree = "<group>";
+		};
+		3A96DA3616819A9D000C2C87 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3A96DA3716819A9D000C2C87 /* LightWebBrowserTests-Info.plist */,
+				3A96DA3816819A9D000C2C87 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3A96DA0316819A9C000C2C87 /* LightWebBrowser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A96DA4016819A9D000C2C87 /* Build configuration list for PBXNativeTarget "LightWebBrowser" */;
+			buildPhases = (
+				3A96DA0016819A9C000C2C87 /* Sources */,
+				3A96DA0116819A9C000C2C87 /* Frameworks */,
+				3A96DA0216819A9C000C2C87 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LightWebBrowser;
+			productName = LightWebBrowser;
+			productReference = 3A96DA0416819A9C000C2C87 /* LightWebBrowser.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3A96DA2D16819A9C000C2C87 /* LightWebBrowserTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A96DA4316819A9D000C2C87 /* Build configuration list for PBXNativeTarget "LightWebBrowserTests" */;
+			buildPhases = (
+				3A96DA2916819A9C000C2C87 /* Sources */,
+				3A96DA2A16819A9C000C2C87 /* Frameworks */,
+				3A96DA2B16819A9C000C2C87 /* Resources */,
+				3A96DA2C16819A9C000C2C87 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3A96DA3416819A9D000C2C87 /* PBXTargetDependency */,
+			);
+			name = LightWebBrowserTests;
+			productName = LightWebBrowserTests;
+			productReference = 3A96DA2E16819A9C000C2C87 /* LightWebBrowserTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3A96D9FB16819A9C000C2C87 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = ASTON;
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "明";
+			};
+			buildConfigurationList = 3A96D9FE16819A9C000C2C87 /* Build configuration list for PBXProject "LightWebBrowser" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3A96D9F916819A9C000C2C87;
+			productRefGroup = 3A96DA0516819A9C000C2C87 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3A96DA0316819A9C000C2C87 /* LightWebBrowser */,
+				3A96DA2D16819A9C000C2C87 /* LightWebBrowserTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3A96DA0216819A9C000C2C87 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A96DA1316819A9C000C2C87 /* InfoPlist.strings in Resources */,
+				3A96DA1B16819A9C000C2C87 /* Default.png in Resources */,
+				3A96DA1D16819A9C000C2C87 /* Default@2x.png in Resources */,
+				3A96DA1F16819A9C000C2C87 /* Default-568h@2x.png in Resources */,
+				3A96DA2216819A9C000C2C87 /* MainStoryboard_iPhone.storyboard in Resources */,
+				3A96DA2516819A9C000C2C87 /* MainStoryboard_iPad.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A96DA2B16819A9C000C2C87 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A96DA3A16819A9D000C2C87 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3A96DA2C16819A9C000C2C87 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3A96DA0016819A9C000C2C87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A96DA1516819A9C000C2C87 /* main.m in Sources */,
+				3A96DA1916819A9C000C2C87 /* ASTONAppDelegate.m in Sources */,
+				3A96DA2816819A9C000C2C87 /* ASTONViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A96DA2916819A9C000C2C87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A96DA3D16819A9D000C2C87 /* LightWebBrowserTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3A96DA3416819A9D000C2C87 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3A96DA0316819A9C000C2C87 /* LightWebBrowser */;
+			targetProxy = 3A96DA3316819A9D000C2C87 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3A96DA1116819A9C000C2C87 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3A96DA1216819A9C000C2C87 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		3A96DA2016819A9C000C2C87 /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3A96DA2116819A9C000C2C87 /* en */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		3A96DA2316819A9C000C2C87 /* MainStoryboard_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3A96DA2416819A9C000C2C87 /* en */,
+			);
+			name = MainStoryboard_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		3A96DA3816819A9D000C2C87 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3A96DA3916819A9D000C2C87 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3A96DA3E16819A9D000C2C87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3A96DA3F16819A9D000C2C87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3A96DA4116819A9D000C2C87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LightWebBrowser/LightWebBrowser-Prefix.pch";
+				INFOPLIST_FILE = "LightWebBrowser/LightWebBrowser-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		3A96DA4216819A9D000C2C87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LightWebBrowser/LightWebBrowser-Prefix.pch";
+				INFOPLIST_FILE = "LightWebBrowser/LightWebBrowser-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		3A96DA4416819A9D000C2C87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/LightWebBrowser.app/LightWebBrowser";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LightWebBrowser/LightWebBrowser-Prefix.pch";
+				INFOPLIST_FILE = "LightWebBrowserTests/LightWebBrowserTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		3A96DA4516819A9D000C2C87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/LightWebBrowser.app/LightWebBrowser";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LightWebBrowser/LightWebBrowser-Prefix.pch";
+				INFOPLIST_FILE = "LightWebBrowserTests/LightWebBrowserTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3A96D9FE16819A9C000C2C87 /* Build configuration list for PBXProject "LightWebBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A96DA3E16819A9D000C2C87 /* Debug */,
+				3A96DA3F16819A9D000C2C87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3A96DA4016819A9D000C2C87 /* Build configuration list for PBXNativeTarget "LightWebBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A96DA4116819A9D000C2C87 /* Debug */,
+				3A96DA4216819A9D000C2C87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		3A96DA4316819A9D000C2C87 /* Build configuration list for PBXNativeTarget "LightWebBrowserTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A96DA4416819A9D000C2C87 /* Debug */,
+				3A96DA4516819A9D000C2C87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3A96D9FB16819A9C000C2C87 /* Project object */;
+}
