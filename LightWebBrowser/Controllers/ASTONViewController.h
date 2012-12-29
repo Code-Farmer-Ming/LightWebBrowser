@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ASTONViewController : UIViewController <UIWebViewDelegate>
+@interface ASTONViewController : UIViewController <UIWebViewDelegate, UIScrollViewDelegate>
 
 	
 @end
