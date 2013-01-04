@@ -10,8 +10,8 @@
 #import "LightWebView.h"
 
 @interface ASTONViewController ()
-    @property (weak, nonatomic) IBOutlet LightWebView *webBrowser;
-@property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
+    @property (strong, nonatomic)  LightWebView *webBrowser;
+@property (strong, nonatomic)  UIScrollView *mainScrollView;
  
     
     @property (weak, nonatomic) IBOutlet UITextField *addressField;
@@ -42,6 +42,13 @@
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     
+}
+
+
+- (UIWebView *)webView:(UIWebView *)sender createWebViewWithRequest:(NSURLRequest *)request
+{
+    
+    return sender;
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     self.addressField.text = @"error";
@@ -74,29 +81,44 @@ const float   PAGE_CONTENT_INSET = 16;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+ 
 	// Do any additional setup after loading the view, typically from a nib.
+    self.mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(-PAGE_CONTENT_INSET, 44, self.view.frame.size.width+PAGE_CONTENT_INSET, self.view.frame.size.height) ];
+     self.mainScrollView.contentSize =CGSizeMake(self.view.frame.size.width*2+2*PAGE_CONTENT_INSET,self.view.frame.size.height);
+    self.mainScrollView.pagingEnabled = YES;
+    self.webBrowser = [[LightWebView alloc] initWithFrame:CGRectMake(PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
+    self.webBrowser.multipleTouchEnabled = YES;
+    self.webBrowser.scalesPageToFit = YES;
     self.webBrowser.scrollView.delegate= self;
+    
+    [self.webBrowser loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
+    
+    [self.mainScrollView addSubview:self.webBrowser];
+       self.mainScrollView.backgroundColor =[UIColor brownColor];
+    [self.view addSubview:self.mainScrollView];
  
           
-    
-    UIWebView *u1 = [[UIWebView alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width,  self.view.frame.size.height)];
-    [u1 loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
-    u1.multipleTouchEnabled = YES;
-    u1.scalesPageToFit = YES;
-    self.webBrowser.scrollView.frame = CGRectMake(self.view.frame.size.width,0, self.view.frame.size.width,  self.view.frame.size.height);
-    u1.backgroundColor =[UIColor redColor];
-  
-    [self.mainScrollView addSubview:u1];
-    u1=  [[UIWebView alloc] initWithFrame:CGRectMake(self.view.frame.size.width+PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
-    u1.backgroundColor= [	UIColor blueColor];
-    
-    [u1 loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baidu.com"]] ] ;
-    u1.multipleTouchEnabled = YES;
-    u1.scalesPageToFit = YES;
-
-      [self.mainScrollView addSubview:u1];
-    self.mainScrollView.contentSize =CGSizeMake(self.view.frame.size.width*2,self.view.frame.size.height);
-     self.mainScrollView.backgroundColor =[UIColor brownColor];
+//    self.mainScrollView.frame=CGRectMake(-PAGE_CONTENT_INSET, 44, self.view.frame.size.width+PAGE_CONTENT_INSET, self.view.frame.size.height);
+//    UIWebView *u1 = [[UIWebView alloc] initWithFrame:CGRectMake(PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
+//    [u1 loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
+//    u1.multipleTouchEnabled = YES;
+//    u1.scalesPageToFit = YES;
+//
+//    u1.backgroundColor =[UIColor redColor];
+//  
+//    [self.mainScrollView addSubview:u1];
+//    u1 =nil;
+//    u1=  [[UIWebView alloc] initWithFrame:CGRectMake(self.view.frame.size.width+2*PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
+//    u1.backgroundColor= [	UIColor blueColor];
+//    
+//    [u1 loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baidu.com"]] ] ;
+//    u1.multipleTouchEnabled = YES;
+//    u1.scalesPageToFit = YES;
+//   
+//      [self.mainScrollView addSubview:u1];
+//    self.mainScrollView.contentSize =CGSizeMake(self.view.frame.size.width*2+2*PAGE_CONTENT_INSET,self.view.frame.size.height);
+//     self.mainScrollView.backgroundColor =[UIColor brownColor];
+//     u1=nil;
     
 }
 
@@ -122,6 +144,7 @@ const float   PAGE_CONTENT_INSET = 16;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 #pragma mark 私有方法
 - (void) updateAddress:(NSURLRequest*)request

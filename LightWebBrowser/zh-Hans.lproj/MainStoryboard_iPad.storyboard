@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2844" systemVersion="11E53" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+    <dependencies>
+        <development version="4500" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1930"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="4">
+            <objects>
+                <viewController id="2" customClass="ASTONViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5">
+                        <rect key="frame" x="0.0" y="20" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZdH-h7-S1r">
+                                <items>
+                                    <barButtonItem style="plain" systemItem="stop" id="1yq-aX-V0w"/>
+                                    <barButtonItem title="Item" id="mbC-Yj-dgM">
+                                        <connections>
+                                            <action selector="toTop:" destination="2" id="u9N-ey-oz4"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" id="Dni-Jn-aa9">
+                                        <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" allowsEditingTextAttributes="YES" borderStyle="roundedRect" placeholder="please input web site" adjustsFontSizeToFit="NO" minimumFontSize="17" background="Default@2x.png" clearButtonMode="whileEditing" id="MU9-bK-fxQ">
+                                            <rect key="frame" x="94" y="7" width="200" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                            <attributedString key="attributedText"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="URL" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="2" id="AXb-O0-m90"/>
+                                            </connections>
+                                        </textField>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="refresh" id="aQb-fA-6zQ">
+                                        <connections>
+                                            <action selector="go:" destination="2" id="xfD-bi-8Sv"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="16g-EI-rQj" customClass="LightWebView">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2" id="ksB-5M-Hfz"/>
+                                    <outletCollection property="gestureRecognizers" destination="fYs-lt-S6H" appends="YES" id="JEN-6c-nAp"/>
+                                </connections>
+                            </webView>
+                            <activityIndicatorView contentMode="scaleToFill" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="hlK-M0-c7Y"/>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="16g-EI-rQj" firstAttribute="top" secondItem="ZdH-h7-S1r" secondAttribute="bottom" type="default" id="1AT-Xb-yjS"/>
+                            <constraint firstItem="16g-EI-rQj" firstAttribute="leading" secondItem="5" secondAttribute="leading" type="default" id="3fG-ZV-SJK"/>
+                            <constraint firstItem="ZdH-h7-S1r" firstAttribute="top" secondItem="5" secondAttribute="top" type="default" id="5hd-nP-LE5"/>
+                            <constraint firstAttribute="centerY" secondItem="hlK-M0-c7Y" secondAttribute="centerY" type="user" id="6ac-1P-Cya"/>
+                            <constraint firstItem="ZdH-h7-S1r" firstAttribute="trailing" secondItem="5" secondAttribute="trailing" type="default" id="RJD-S4-8yt"/>
+                            <constraint firstItem="16g-EI-rQj" firstAttribute="bottom" secondItem="5" secondAttribute="bottom" type="default" id="TUp-eY-Qta"/>
+                            <constraint firstItem="ZdH-h7-S1r" firstAttribute="leading" secondItem="5" secondAttribute="leading" type="default" id="hXS-Db-nkf"/>
+                            <constraint firstAttribute="centerX" secondItem="hlK-M0-c7Y" secondAttribute="centerX" type="user" id="oNM-dA-Ovy"/>
+                            <constraint firstItem="16g-EI-rQj" firstAttribute="trailing" secondItem="5" secondAttribute="trailing" type="default" id="qBO-xk-97f"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="addressField" destination="MU9-bK-fxQ" id="6Jx-XU-SlW"/>
+                        <outlet property="goButton" destination="aQb-fA-6zQ" id="aGU-k6-MJc"/>
+                        <outlet property="toolbar" destination="ZdH-h7-S1r" id="Lb3-rH-FHc"/>
+                        <outlet property="webBrowser" destination="16g-EI-rQj" id="2zx-A1-IhB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="fYs-lt-S6H"/>
+            </objects>
+            <point key="canvasLocation" x="-2010" y="62"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Default@2x.png" width="640" height="960"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

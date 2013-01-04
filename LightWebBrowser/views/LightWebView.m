@@ -7,6 +7,7 @@
 //
 
 #import "LightWebView.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation LightWebView
 
@@ -23,6 +24,21 @@
 -(void)scrollToTop
 {
     [self.scrollView setContentOffset:CGPointMake(0, 0) animated:true];
+}
+
+-(UIImage*)captureScreen{
+    UIGraphicsBeginImageContext(self.bounds.size);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return viewImage;
+}
+
+ 
+- (UIWebView *)webView:(UIWebView *)sender createWebViewWithRequest:(NSURLRequest *)request
+{
+    
+    return sender;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

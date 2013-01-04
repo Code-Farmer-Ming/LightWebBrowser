@@ -17,8 +17,8 @@
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" allowsEditingTextAttributes="YES" borderStyle="roundedRect" placeholder="please input web site" adjustsFontSizeToFit="NO" minimumFontSize="17" background="Default@2x.png" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="7eD-TW-aaO">
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="k6k-Vm-IzR"/>
-                                            <constraint firstAttribute="width" constant="422" id="mRl-xn-34w"/>
+                                            <constraint firstAttribute="width" constant="422" id="ZYS-3n-Cda"/>
+                                            <constraint firstAttribute="height" constant="35" id="uBE-vf-UIC"/>
                                         </constraints>
                                         <attributedString key="attributedText"/>
                                         <textInputTraits key="textInputTraits" keyboardType="URL" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
@@ -28,8 +28,8 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Dz-QQ-0rR">
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="31" id="UUd-Y4-4pn"/>
-                                            <constraint firstAttribute="width" constant="60" id="qFI-IM-mar"/>
+                                            <constraint firstAttribute="height" constant="31" id="Ctx-uB-uve"/>
+                                            <constraint firstAttribute="width" constant="60" id="atF-0U-S1w"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="18"/>
                                         <state key="normal" title="go">
@@ -40,46 +40,22 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="7eD-TW-aaO" firstAttribute="top" secondItem="NlW-Gm-pZi" secondAttribute="top" constant="3" id="LBb-0L-Jvq"/>
-                                    <constraint firstItem="7eD-TW-aaO" firstAttribute="baseline" secondItem="8Dz-QQ-0rR" secondAttribute="baseline" type="default" id="Ly2-pN-7Ca"/>
-                                    <constraint firstItem="8Dz-QQ-0rR" firstAttribute="leading" secondItem="7eD-TW-aaO" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="YQe-av-3GU"/>
-                                    <constraint firstItem="8Dz-QQ-0rR" firstAttribute="top" secondItem="NlW-Gm-pZi" secondAttribute="top" constant="6" id="opL-nO-ZpL"/>
-                                    <constraint firstItem="7eD-TW-aaO" firstAttribute="leading" secondItem="NlW-Gm-pZi" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="pTQ-tZ-TMM"/>
+                                    <constraint firstItem="7eD-TW-aaO" firstAttribute="leading" secondItem="NlW-Gm-pZi" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="EIz-uk-9Yg"/>
+                                    <constraint firstItem="8Dz-QQ-0rR" firstAttribute="leading" secondItem="7eD-TW-aaO" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Hpz-3M-nFV"/>
+                                    <constraint firstItem="8Dz-QQ-0rR" firstAttribute="top" secondItem="NlW-Gm-pZi" secondAttribute="top" constant="6" id="QPC-fS-ab0"/>
+                                    <constraint firstItem="7eD-TW-aaO" firstAttribute="top" secondItem="NlW-Gm-pZi" secondAttribute="top" constant="3" id="Y60-vq-ay3"/>
                                 </constraints>
                             </view>
                             <activityIndicatorView contentMode="scaleToFill" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="hlK-M0-c7Y"/>
-                            <webView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="16g-EI-rQj" customClass="LightWebView">
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="309" id="HQZ-aS-3Bl"/>
-                                    <constraint firstAttribute="height" constant="293" id="l7u-Cg-ekL"/>
-                                </constraints>
-                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="2" id="ksB-5M-Hfz"/>
-                                    <outletCollection property="gestureRecognizers" destination="fYs-lt-S6H" appends="YES" id="JEN-6c-nAp"/>
-                                </connections>
-                            </webView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" bounces="NO" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsVerticalScrollIndicator="NO" indicatorStyle="black" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n19-t9-QIj"/>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="fiE-1p-m1E"/>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="16g-EI-rQj" firstAttribute="centerY" secondItem="hlK-M0-c7Y" secondAttribute="centerY" type="default" id="1oM-a1-etD"/>
-                            <constraint firstItem="NlW-Gm-pZi" firstAttribute="centerX" secondItem="hlK-M0-c7Y" secondAttribute="centerX" type="default" id="6Zn-GX-2EF"/>
-                            <constraint firstItem="fiE-1p-m1E" firstAttribute="centerX" secondItem="hlK-M0-c7Y" secondAttribute="centerX" type="default" id="AdR-yL-hdr"/>
-                            <constraint firstItem="NlW-Gm-pZi" firstAttribute="top" secondItem="5" secondAttribute="top" type="default" id="HCX-GE-FkA"/>
-                            <constraint firstItem="NlW-Gm-pZi" firstAttribute="leading" secondItem="5" secondAttribute="leading" type="default" id="U9R-KX-MBZ"/>
-                            <constraint firstItem="NlW-Gm-pZi" firstAttribute="trailing" secondItem="5" secondAttribute="trailing" type="default" id="Vga-XV-lOb"/>
-                            <constraint firstItem="16g-EI-rQj" firstAttribute="leading" secondItem="5" secondAttribute="leading" constant="229" id="WwT-FK-sBY"/>
-                            <constraint firstAttribute="bottom" secondItem="n19-t9-QIj" secondAttribute="bottom" constant="-5" id="XTo-mQ-efv"/>
-                            <constraint firstItem="n19-t9-QIj" firstAttribute="top" secondItem="5" secondAttribute="top" constant="45" id="YsE-nd-Mbd"/>
-                            <constraint firstItem="n19-t9-QIj" firstAttribute="leading" secondItem="5" secondAttribute="leading" type="default" id="nJ2-Km-zAs"/>
-                            <constraint firstItem="n19-t9-QIj" firstAttribute="trailing" secondItem="5" secondAttribute="trailing" type="default" id="sou-va-kDb"/>
-                            <constraint firstAttribute="bottom" secondItem="NlW-Gm-pZi" secondAttribute="bottom" constant="916" id="tTK-cg-dXW"/>
-                            <constraint firstItem="hlK-M0-c7Y" firstAttribute="centerY" secondItem="5" secondAttribute="centerY" type="default" id="u80-gy-34p"/>
-                            <constraint firstAttribute="bottom" secondItem="fiE-1p-m1E" secondAttribute="bottom" constant="38" id="uP1-5f-HTC"/>
+                            <constraint firstItem="NlW-Gm-pZi" firstAttribute="centerX" secondItem="hlK-M0-c7Y" secondAttribute="centerX" type="default" id="9tR-ZK-rAZ"/>
+                            <constraint firstAttribute="bottom" secondItem="NlW-Gm-pZi" secondAttribute="bottom" constant="916" id="Ei0-Ad-ZE8"/>
+                            <constraint firstItem="NlW-Gm-pZi" firstAttribute="trailing" secondItem="5" secondAttribute="trailing" type="default" id="Kum-6C-xgn"/>
+                            <constraint firstItem="NlW-Gm-pZi" firstAttribute="top" secondItem="5" secondAttribute="top" type="default" id="gTQ-Yf-IQb"/>
+                            <constraint firstItem="hlK-M0-c7Y" firstAttribute="centerY" secondItem="5" secondAttribute="centerY" type="default" id="rmO-L6-I1o"/>
+                            <constraint firstItem="NlW-Gm-pZi" firstAttribute="leading" secondItem="5" secondAttribute="leading" type="default" id="vLr-g9-q3z"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -87,13 +63,10 @@
                     <connections>
                         <outlet property="addressField" destination="7eD-TW-aaO" id="JjA-Ip-oFI"/>
                         <outlet property="goButton" destination="8Dz-QQ-0rR" id="e2C-w4-eab"/>
-                        <outlet property="mainScrollView" destination="n19-t9-QIj" id="HTS-Hm-gES"/>
                         <outlet property="toolbar" destination="NlW-Gm-pZi" id="wCV-sn-B7G"/>
-                        <outlet property="webBrowser" destination="16g-EI-rQj" id="2zx-A1-IhB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="fYs-lt-S6H"/>
             </objects>
             <point key="canvasLocation" x="-2046" y="276"/>
         </scene>

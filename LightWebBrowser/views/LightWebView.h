@@ -11,4 +11,8 @@
 @interface LightWebView : UIWebView
  
 - (void)scrollToTop;
+
+-(UIImage*)captureScreen;
+ 
+
 @end
