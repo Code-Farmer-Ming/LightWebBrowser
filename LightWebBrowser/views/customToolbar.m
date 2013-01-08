@@ -22,9 +22,9 @@
     CGContextSetLineWidth(context, 0.6);
     
     
-    CGContextMoveToPoint(context,0,rect.size.height/2); //start at this point
+    CGContextMoveToPoint(context,0,rect.size.height); //start at this point
     
-    CGContextAddLineToPoint(context, rect.size.width,rect.size.height/2); //draw to this point
+    CGContextAddLineToPoint(context, rect.size.width,rect.size.height); //draw to this point
     
     // and now draw the Path!
     CGContextStrokePath(context);

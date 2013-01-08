@@ -10,5 +10,4 @@
 
 @interface ASTONViewController : UIViewController <UIWebViewDelegate, UIScrollViewDelegate>
 
-	
 @end

@@ -10,38 +10,144 @@
 #import "LightWebView.h"
 
 @interface ASTONViewController ()
-    @property (strong, nonatomic)  LightWebView *webBrowser;
-@property (strong, nonatomic)  UIScrollView *mainScrollView;
- 
+{
+    LightWebView *webBrowser;
+    UIScrollView *mainScrollView;
+    NSMutableArray *thumbArrary;
+    int currentPageIndex;
+}
+    @property (weak, nonatomic) IBOutlet UIButton *reload;
     
+    @property (weak, nonatomic) IBOutlet UIButton *go;
+   
+    @property (weak, nonatomic) IBOutlet UIButton *stop;
+
     @property (weak, nonatomic) IBOutlet UITextField *addressField;
     @property (weak, nonatomic) IBOutlet UIScrollView *webScrollView;
 
-    @property (weak, nonatomic) IBOutlet UIButton *goButton;
+    @property (weak, nonatomic) IBOutlet UIButton *back;
+
+    @property (weak, nonatomic) IBOutlet UIButton *forward;
  
 
     @property (weak, nonatomic) IBOutlet UIView *toolbar;
 
-    - (IBAction)toTop:(UIBarButtonItem *)sender;
+    
 
 @end
 
-@implementation ASTONViewController
 
+
+@implementation ASTONViewController
+const float   PAGE_CONTENT_INSET = 16;
+const float   TOOLBAR_HEIGHT = 44;
+
+#pragma mark rootview委托
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    currentPageIndex =-1;
+	// Do any additional setup after loading the view, typically from a nib.
+    mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(-PAGE_CONTENT_INSET,TOOLBAR_HEIGHT, self.view.frame.size.width+PAGE_CONTENT_INSET, self.view.frame.size.height) ];
+    mainScrollView.contentSize =CGSizeMake((self.view.frame.size.width+PAGE_CONTENT_INSET),self.view.frame.size.height);
+    mainScrollView.pagingEnabled = YES;
+    webBrowser = [[LightWebView alloc] initWithFrame:CGRectMake(PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
+    webBrowser.multipleTouchEnabled = YES;
+    webBrowser.scalesPageToFit = YES;
+    webBrowser.scrollView.delegate= self;
+    webBrowser.delegate =self;
+    
+    [mainScrollView addSubview:webBrowser];
+    mainScrollView.backgroundColor =[UIColor brownColor];
+    mainScrollView.delegate = self;
+    [self.view addSubview:mainScrollView];
+    
+    //    [webBrowser loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
+    
+    
+    UIView *thumbImage;
+    for (int i=1; i<4; i++) {
+        thumbImage = [[UIView alloc] initWithFrame:CGRectMake((self.view.frame.size.width +PAGE_CONTENT_INSET)*(i-1)+PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
+        thumbImage.tag = i;
+        thumbImage.backgroundColor = [UIColor whiteColor];
+        thumbImage.hidden = YES;
+        [mainScrollView addSubview:thumbImage];
+    }
+    //    thumbImage = nil;
+    [self updateButtons];
+}
+
+
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+#pragma mark scrollview委托
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float yy= scrollView.contentOffset.y;
+    if (scrollView.contentOffset.y>self.toolbar.frame.size.height)
+        yy = self.toolbar.frame.size.height;
+    [self.toolbar setFrame:CGRectMake(0,-yy, self.toolbar.frame.size.width,self.toolbar.frame.size.height)] ;
+    [mainScrollView setFrame:CGRectMake(mainScrollView.frame.origin.x,self.toolbar.frame.size.height-yy, mainScrollView.frame.size.width,mainScrollView.frame.size.height+self.toolbar.frame.size.height-yy)] ;
+    
+    
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    int page = floor((scrollView.contentOffset.x - self.view.frame.size.width / 2) / self.view.frame.size.width) + 1;
+    int relativePageIndex = currentPageIndex % 3;
+    if (page==relativePageIndex) {
+        return;
+    }
+    if (page<relativePageIndex){
+               [webBrowser goBack];
+        currentPageIndex--;
+        
+    }
+    else
+    {
+           [webBrowser goForward];
+              currentPageIndex++;
+    }
+    [mainScrollView viewWithTag:relativePageIndex+1].hidden= NO;
+    webBrowser.frame =CGRectMake((self.view.frame.size.width +PAGE_CONTENT_INSET) *page+PAGE_CONTENT_INSET, 0, self.view.frame.size.width, self.view.frame.size.height);
+    
+
+}
 #pragma mark uiwebview委托
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
     [self updateAddress :request];
-    return YES;
+   
+     if ([thumbArrary count]> currentPageIndex) {
+        [thumbArrary removeObjectsInRange:NSMakeRange(currentPageIndex+1, 999)];
+    }
+    
+        currentPageIndex++;
+        [thumbArrary addObject:[[request URL] absoluteString]];
+    int lastPageIndex = currentPageIndex;
+    if (lastPageIndex>2) lastPageIndex =2;
+    
+    
+    mainScrollView.contentSize = CGSizeMake((self.view.frame.size.width +PAGE_CONTENT_INSET) *(lastPageIndex+1), self.view.frame.size.height);
+    
+    webBrowser.frame = CGRectMake((self.view.frame.size.width +PAGE_CONTENT_INSET) *lastPageIndex+PAGE_CONTENT_INSET, 0, self.view.frame.size.width, self.view.frame.size.height);
+    [mainScrollView viewWithTag:lastPageIndex].hidden= NO;
+    
+    [mainScrollView scrollRectToVisible:CGRectMake((self.view.frame.size.width +PAGE_CONTENT_INSET) *lastPageIndex+PAGE_CONTENT_INSET, 0, self.view.frame.size.width+PAGE_CONTENT_INSET, self.view.frame.size.height) animated:NO];
+    
+     return YES;
 }
 	
 - (void)webViewDidStartLoad:(UIWebView *)webView{
- 
-  
-  
-                   
+   [self updateButtons];
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
-    
+    [self updateButtons];
+    [mainScrollView bringSubviewToFront:webView];
 }
 
 
@@ -51,109 +157,63 @@
     return sender;
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    self.addressField.text = @"error";
+    [self updateButtons];
 }
 #pragma mark 输入框委托
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
-    [self go  :self.goButton];
+    [self go  :nil];
     return YES;
 }
 #pragma mark 可视化组件事件
 - (IBAction)go:(UIButton *)sender {
-  
-    NSURL *url = [NSURL URLWithString: self.addressField.text];
+    
+    
+   NSURL *url = [NSURL URLWithString: self.addressField.text];
     if (!url.scheme)
     {
         NSString* modifiedURLString = [NSString stringWithFormat:@"http://%@", self.addressField.text];
         url = [NSURL URLWithString:modifiedURLString];
     }
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-    [self.webBrowser loadRequest:urlRequest];
+    [webBrowser loadRequest:urlRequest];
 }
+
+- (IBAction)reload:(id)sender {
+    [webBrowser reload];
+}
+ 
 
 -(IBAction)stop:(id)sender{
-    
-}
-const float   PAGE_CONTENT_INSET = 16;
-
-#pragma mark rootview委托
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
- 
-	// Do any additional setup after loading the view, typically from a nib.
-    self.mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(-PAGE_CONTENT_INSET, 44, self.view.frame.size.width+PAGE_CONTENT_INSET, self.view.frame.size.height) ];
-     self.mainScrollView.contentSize =CGSizeMake(self.view.frame.size.width*2+2*PAGE_CONTENT_INSET,self.view.frame.size.height);
-    self.mainScrollView.pagingEnabled = YES;
-    self.webBrowser = [[LightWebView alloc] initWithFrame:CGRectMake(PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
-    self.webBrowser.multipleTouchEnabled = YES;
-    self.webBrowser.scalesPageToFit = YES;
-    self.webBrowser.scrollView.delegate= self;
-    
-    [self.webBrowser loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
-    
-    [self.mainScrollView addSubview:self.webBrowser];
-       self.mainScrollView.backgroundColor =[UIColor brownColor];
-    [self.view addSubview:self.mainScrollView];
- 
-          
-//    self.mainScrollView.frame=CGRectMake(-PAGE_CONTENT_INSET, 44, self.view.frame.size.width+PAGE_CONTENT_INSET, self.view.frame.size.height);
-//    UIWebView *u1 = [[UIWebView alloc] initWithFrame:CGRectMake(PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
-//    [u1 loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
-//    u1.multipleTouchEnabled = YES;
-//    u1.scalesPageToFit = YES;
-//
-//    u1.backgroundColor =[UIColor redColor];
-//  
-//    [self.mainScrollView addSubview:u1];
-//    u1 =nil;
-//    u1=  [[UIWebView alloc] initWithFrame:CGRectMake(self.view.frame.size.width+2*PAGE_CONTENT_INSET,0, self.view.frame.size.width,  self.view.frame.size.height)];
-//    u1.backgroundColor= [	UIColor blueColor];
-//    
-//    [u1 loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baidu.com"]] ] ;
-//    u1.multipleTouchEnabled = YES;
-//    u1.scalesPageToFit = YES;
-//   
-//      [self.mainScrollView addSubview:u1];
-//    self.mainScrollView.contentSize =CGSizeMake(self.view.frame.size.width*2+2*PAGE_CONTENT_INSET,self.view.frame.size.height);
-//     self.mainScrollView.backgroundColor =[UIColor brownColor];
-//     u1=nil;
-    
+    [webBrowser stopLoading];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
- 
-    if (scrollView.contentOffset.y>=0 && scrollView.contentOffset.y<= self.toolbar.frame.size.height)
-    {
-        [self.toolbar setFrame:CGRectMake(0,-scrollView.contentOffset.y, self.toolbar.frame.size.width,self.toolbar.frame.size.height)] ;
-        float yy = self.toolbar.frame.size.height-scrollView.contentOffset.y;;
-
-        if (yy<0)
-            yy =0;
-                     [self.mainScrollView setFrame:CGRectMake(0,yy, self.mainScrollView.frame.size.width,self.mainScrollView.frame.size.height)] ;
-    }
-  
-    NSLog(@"x %f y %f",scrollView.contentOffset.x,scrollView.contentOffset.y);
-    
+- (IBAction)goback:(UIButton *)sender {
+    [webBrowser goBack];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)forWard:(UIButton *)sender {
+    [webBrowser goForward];
 }
+
+
 
 
 #pragma mark 私有方法
+-(void) updateButtons
+{
+    self.forward.enabled = webBrowser.canGoForward;
+    self.back.enabled = webBrowser.canGoBack;
+    self.stop.hidden = !webBrowser.loading;
+    self.reload.hidden = webBrowser.loading;
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = webBrowser.loading;
+}
+
 - (void) updateAddress:(NSURLRequest*)request
 {
     NSURL* url = [request mainDocumentURL];
     NSString* absoluteString = [url absoluteString];
     self.addressField.text = absoluteString;
 }
-- (IBAction)toTop:(UIBarButtonItem *)sender {
-    [self.webScrollView setContentOffset:CGPointMake(0,0) animated:YES];
-}
+
 @end
