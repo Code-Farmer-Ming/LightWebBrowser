@@ -12,5 +12,5 @@
 //缓存文件夹
 +(NSString *) cacheDirectory;
 
-
++(NSString*) filePathName: (NSString*) fileName;
 @end

@@ -12,7 +12,13 @@
 
 +(NSString*) cacheDirectory
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-   return [paths lastObject];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+   return [paths  lastObject];
+}
+
++(NSString*) filePathName: (NSString*) fileName
+{
+    return [[DirectoryHelper cacheDirectory] stringByAppendingPathComponent:fileName];
+     
 }
 @end

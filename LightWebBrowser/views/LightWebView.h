@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @interface LightWebView : UIWebView
- 
+
+
 - (void)scrollToTop;
 
 -(UIImage*)captureScreen;
- 
 
+-(NSString *) saveCaptureToCacheFile;
+
+-(NSString *) captureFilePath;
+
+-(void)loadRequestFromString: (NSString*)urlString;
+- (id) backForwardList;
 @end

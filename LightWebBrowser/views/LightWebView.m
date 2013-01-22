@@ -8,6 +8,8 @@
 
 #import "LightWebView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NSString+toMD5.h"
+#import "DirectoryHelper.h"
 
 @implementation LightWebView
 
@@ -20,10 +22,13 @@
     }
     return self;
 }
-
+- (id) backForwardList
+{
+    return [[[self performSelector:@selector(_documentView)] performSelector:@selector(webView)] performSelector:@selector(backForwardList)];
+}
 -(void)scrollToTop
 {
-    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:true];
+        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:true];
 }
 
 -(UIImage*)captureScreen{
@@ -34,11 +39,30 @@
     return viewImage;
 }
 
- 
-- (UIWebView *)webView:(UIWebView *)sender createWebViewWithRequest:(NSURLRequest *)request
+-(NSString *)saveCaptureToCacheFile
 {
-    
-    return sender;
+    NSString* cacheFilePath = self.captureFilePath;
+    NSData* imageData = UIImagePNGRepresentation(self.captureScreen);
+    [imageData writeToFile:cacheFilePath atomically:YES];
+    return cacheFilePath;
+}
+
+-(NSString *) captureFilePath
+{
+  return [DirectoryHelper filePathName:[[[self.request URL] absoluteString] toMD5] ]  ;
+}
+
+ 
+-(void)loadRequestFromString: (NSString*)urlString
+{
+    NSURL *url = [NSURL URLWithString: urlString];
+    if (!url.scheme)
+    {
+        NSString* modifiedURLString = [NSString stringWithFormat:@"http://%@", urlString];
+        url = [NSURL URLWithString:modifiedURLString];
+    }
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+    [self loadRequest:urlRequest];
 }
 /*
 // Only override drawRect: if you perform custom drawing.
