@@ -55,7 +55,7 @@ const float   TOOLBAR_HEIGHT = 44;
 	// Do any additional setup after loading the view, typically from a nib.
     mainScrollView = [UIScrollView new];
     mainScrollView.translatesAutoresizingMaskIntoConstraints=NO;
-      mainScrollView.pagingEnabled = YES;
+    mainScrollView.pagingEnabled = YES;
     webBrowser = [LightWebView new];
     webBrowser.multipleTouchEnabled = YES;
     webBrowser.scalesPageToFit = YES;
@@ -80,25 +80,27 @@ const float   TOOLBAR_HEIGHT = 44;
     
     UIImageView *thumbImage;
     for (int i=1; i<4; i++) {
-        thumbImage = [	UIImageView new];
+        thumbImage = [UIImageView new];
         thumbImage.tag = i;
         thumbImage.backgroundColor = [UIColor blueColor];
         thumbImage.translatesAutoresizingMaskIntoConstraints = NO;
         
         [mainScrollView addSubview:thumbImage];
         //设置 images的位置
-        [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem:[mainScrollView viewWithTag:i] attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:i-1] attribute:NSLayoutAttributeLeft multiplier:1.0 constant:PAGE_CONTENT_INSET]];
+        [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem:[mainScrollView viewWithTag:i] attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:i>1 ? [mainScrollView viewWithTag:i-1]: nil  attribute:NSLayoutAttributeRight multiplier:1.0 constant:PAGE_CONTENT_INSET]];
         
-        [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem:[mainScrollView viewWithTag:i] attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:mainScrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+        [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem:[mainScrollView viewWithTag:i] attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
         
         [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem:[mainScrollView viewWithTag:i] attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:mainScrollView attribute:NSLayoutAttributeWidth multiplier:1.0 constant:-PAGE_CONTENT_INSET]];
+        
         [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem:[mainScrollView viewWithTag:i] attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:mainScrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0]];
 
     }
     //设置webbrowser的位置
     [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0]];
     [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
-    [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+    [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem: [mainScrollView viewWithTag:1]   attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+    
     webBrowserLeftConstraint = [NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
     [mainScrollView addConstraint:webBrowserLeftConstraint];
 
@@ -122,11 +124,15 @@ const float   TOOLBAR_HEIGHT = 44;
 #pragma mark scrollview委托
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    float yy= scrollView.contentOffset.y;
-    if (scrollView.contentOffset.y>self.toolbar.frame.size.height)
+    if (scrollView==webBrowser.scrollView) {
+        float yy= scrollView.contentOffset.y;
+        if (scrollView.contentOffset.y>self.toolbar.frame.size.height)
         yy = self.toolbar.frame.size.height;
-    [self.toolbar setFrame:CGRectMake(0,-yy, self.toolbar.frame.size.width,self.toolbar.frame.size.height)] ;
-    [mainScrollView setFrame:CGRectMake(mainScrollView.frame.origin.x,self.toolbar.frame.size.height-yy, mainScrollView.frame.size.width,mainScrollView.frame.size.height+self.toolbar.frame.size.height-yy)] ; 
+        [self.toolbar setFrame:CGRectMake(0,-yy, self.toolbar.frame.size.width,self.toolbar.frame.size.height)] ;
+        [mainScrollView setFrame:CGRectMake(mainScrollView.frame.origin.x,self.toolbar.frame.size.height-yy, mainScrollView.frame.size.width,mainScrollView.frame.size.height+self.toolbar.frame.size.height-yy)] ;
+    }else{
+        NSLog(@"<#string#>");
+    }
 }
 -(int) actualPageIndex{
     int pageIndex=currentPageIndex;
@@ -178,8 +184,6 @@ const float   TOOLBAR_HEIGHT = 44;
     return YES;
 }
 
- 
-
 -(void)adjustScrollAndContent{
     int bound =[thumbArrary count];
     int pageIndex= [self actualPageIndex];
@@ -187,14 +191,14 @@ const float   TOOLBAR_HEIGHT = 44;
     if (bound>3){
         bound= 3;
     }
-    mainScrollView.contentSize = CGSizeMake((mainScrollView.bounds.size.width) *bound, self.view.frame.size.height);
+    mainScrollView.contentSize = CGSizeMake((mainScrollView.frame.size.width) *bound, mainScrollView.frame.size.height);
+    
     [mainScrollView removeConstraint:webBrowserLeftConstraint];
-            webBrowserLeftConstraint = [NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:pageIndex+1]  attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
+    webBrowserLeftConstraint = [NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:pageIndex+1]  attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
     [mainScrollView addConstraint:webBrowserLeftConstraint];
     [mainScrollView updateConstraintsIfNeeded];
     
-    
-    [mainScrollView scrollRectToVisible:CGRectMake((self.view.bounds.size.width+PAGE_CONTENT_INSET) *pageIndex+PAGE_CONTENT_INSET, 0, mainScrollView.bounds.size.width, mainScrollView.bounds.size.height) animated:NO];
+    [mainScrollView scrollRectToVisible: [mainScrollView viewWithTag:pageIndex+1].frame animated:NO];
         [mainScrollView bringSubviewToFront:((UIImageView*)[mainScrollView viewWithTag:pageIndex+1])];
     if (pageIndex>0) {
         ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).hidden=NO;
@@ -208,6 +212,12 @@ const float   TOOLBAR_HEIGHT = 44;
     }
     
    
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self adjustScrollAndContent];
+    [webBrowser bringToFront];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView{
