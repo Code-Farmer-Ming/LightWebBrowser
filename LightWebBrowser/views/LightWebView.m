@@ -10,7 +10,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NSString+toMD5.h"
 #import "DirectoryHelper.h"
- 
+#import "WebBackForwardList.h"
+
 @implementation LightWebView
 
 - (id)initWithFrame:(CGRect)frame
@@ -22,7 +23,7 @@
     }
     return self;
 }
-- (id) backForwardList
+- (WebBackForwardList*) backForwardList
 {
     return [[[self performSelector:@selector(_documentView)] performSelector:@selector(webView)] performSelector:@selector(backForwardList)];
 }

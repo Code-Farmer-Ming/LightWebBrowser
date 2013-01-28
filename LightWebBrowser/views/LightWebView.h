@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WebBackForwardList.h"
 
 @interface LightWebView : UIWebView
 
@@ -20,5 +21,5 @@
 -(NSString *) captureFilePath;
 
 -(void)loadRequestFromString: (NSString*)urlString;
-- (id) backForwardList;
+- (WebBackForwardList*) backForwardList;
 @end

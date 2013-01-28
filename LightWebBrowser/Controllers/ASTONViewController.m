@@ -13,6 +13,7 @@
 #import "NSURLRequest+Extension.h"
 #import "UIView+Extension.h"
 
+
 @interface ASTONViewController ()
 {
     LightWebView *webBrowser;
@@ -37,8 +38,6 @@
 
     @property (weak, nonatomic) IBOutlet UIView *toolbar;
 
-    
-
 @end
 
 
@@ -60,7 +59,7 @@ const float   TOOLBAR_HEIGHT = 44;
     webBrowser.multipleTouchEnabled = YES;
     webBrowser.scalesPageToFit = YES;
     webBrowser.translatesAutoresizingMaskIntoConstraints =NO;
-//    webBrowser.scrollView.delegate= self;
+    webBrowser.scrollView.delegate= self;
     webBrowser.delegate =self;
     self.view.backgroundColor =[UIColor redColor];
     
@@ -82,6 +81,7 @@ const float   TOOLBAR_HEIGHT = 44;
     for (int i=1; i<4; i++) {
         thumbImage = [UIImageView new];
         thumbImage.tag = i;
+        thumbImage.hidden= true;
         thumbImage.backgroundColor = [UIColor blueColor];
         thumbImage.translatesAutoresizingMaskIntoConstraints = NO;
         
@@ -116,6 +116,12 @@ const float   TOOLBAR_HEIGHT = 44;
     
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self adjustScrollAndContent];
+    [webBrowser bringToFront];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -130,24 +136,14 @@ const float   TOOLBAR_HEIGHT = 44;
         yy = self.toolbar.frame.size.height;
         [self.toolbar setFrame:CGRectMake(0,-yy, self.toolbar.frame.size.width,self.toolbar.frame.size.height)] ;
         [mainScrollView setFrame:CGRectMake(mainScrollView.frame.origin.x,self.toolbar.frame.size.height-yy, mainScrollView.frame.size.width,mainScrollView.frame.size.height+self.toolbar.frame.size.height-yy)] ;
-    }else{
-        NSLog(@"<#string#>");
     }
-}
--(int) actualPageIndex{
-    int pageIndex=currentPageIndex;
-    int bound =[thumbArrary count];
-    if ((pageIndex+1)>=bound && bound>2) {
-        pageIndex=2;
-    }else if (pageIndex>1) {
-        pageIndex=1;
-    }
-    return pageIndex;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-     
+    if (scrollView!=mainScrollView) {
+        return;
+    }
     int page =   floor(scrollView.contentOffset.x / scrollView.frame.size.width);
     NSLog(@" current page %d",page);
     int actualPageIndex = [self actualPageIndex];
@@ -168,56 +164,21 @@ const float   TOOLBAR_HEIGHT = 44;
 #pragma mark uiwebview委托
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
 //    [self updateAddress :request];
-    NSLog(@"%d",navigationType);
+    NSLog(@"navigationType %d",navigationType);
     
 
     if (navigationType!=UIWebViewNavigationTypeBackForward && !request.isFromFrameLoading) {
 //             if ([thumbArrary count]> (currentPageIndex+1)) {
 //                [thumbArrary removeObjectsInRange:NSMakeRange(currentPageIndex, [thumbArrary count])];
 //            }
-        NSLog(@"url: %@",[[request URL] absoluteString]);
- 
+        NSLog(@"url scheme: %@",[[request URL] scheme]);
+        NSLog(@"temp path : %@",   [DirectoryHelper filePathName:[[[request mainDocumentURL] absoluteString] toMD5]]);
+
         currentPageIndex++;
         [thumbArrary addObject: [DirectoryHelper filePathName:[[[request mainDocumentURL] absoluteString] toMD5]]];
         [self adjustScrollAndContent] ;
     }
     return YES;
-}
-
--(void)adjustScrollAndContent{
-    int bound =[thumbArrary count];
-    int pageIndex= [self actualPageIndex];
-    NSLog(@"count %d",[thumbArrary count]);
-    if (bound>3){
-        bound= 3;
-    }
-    mainScrollView.contentSize = CGSizeMake((mainScrollView.frame.size.width) *bound, mainScrollView.frame.size.height);
-    
-    [mainScrollView removeConstraint:webBrowserLeftConstraint];
-    webBrowserLeftConstraint = [NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:pageIndex+1]  attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
-    [mainScrollView addConstraint:webBrowserLeftConstraint];
-    [mainScrollView updateConstraintsIfNeeded];
-    
-    [mainScrollView scrollRectToVisible: [mainScrollView viewWithTag:pageIndex+1].frame animated:NO];
-        [mainScrollView bringSubviewToFront:((UIImageView*)[mainScrollView viewWithTag:pageIndex+1])];
-    if (pageIndex>0) {
-        ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).hidden=NO;
-        [ ((UIImageView*)[mainScrollView viewWithTag:pageIndex]) bringToFront];
-        ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).image= [UIImage imageWithContentsOfFile:[thumbArrary objectAtIndex:currentPageIndex-1]];
-    }
-    if (bound>(pageIndex+1)) {
-        ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).hidden=NO;
-         [((UIImageView*)[mainScrollView viewWithTag:pageIndex+2] )bringToFront];
-       ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).image = [UIImage imageWithContentsOfFile:[thumbArrary objectAtIndex:currentPageIndex+1]];
-    }
-    
-   
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [self adjustScrollAndContent];
-    [webBrowser bringToFront];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView{
@@ -227,11 +188,22 @@ const float   TOOLBAR_HEIGHT = 44;
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     [self updateButtons];
     [webBrowser saveCaptureToCacheFile];
-    [webView performSelector:@selector(bringToFront) withObject:nil afterDelay:1];
-    id  backList = [webBrowser backForwardList];
-    NSLog(@"%@", backList);
-    NSLog(@"lenght %d", (int)[backList performSelector:@selector(backListCount)]);
+  
+ 
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.5f];
+     webView.alpha = 1.0f;
+     [webView bringToFront];
+    [UIView commitAnimations];
+
+    
+    
+//    WebBackForwardList*  backList = [webBrowser backForwardList];
+//    NSLog(@"%@", backList);
+//    NSLog(@"lenght %@",  [backList  currentItem]);
     NSLog(@"finished");
+
 }
 
 
@@ -241,6 +213,9 @@ const float   TOOLBAR_HEIGHT = 44;
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [self updateButtons];
+   
+    [webBrowser loadHTMLString:[NSString stringWithFormat:@"<h1>%d</h1><h1>%@</h1>",[error code],[error localizedDescription]] baseURL:[NSURL URLWithString:@"about:blank"] ];
+    NSLog(@"错误 domain %@, code %d, localizedDescription %@,localizedFailureReason %@",[error domain],[error code],[error localizedDescription],[error localizedFailureReason]);
 }
 #pragma mark 输入框委托
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -272,6 +247,46 @@ const float   TOOLBAR_HEIGHT = 44;
 }
 
 #pragma mark 私有方法
+-(void)adjustScrollAndContent{
+    int bound =[thumbArrary count];
+    int pageIndex= [self actualPageIndex];
+    NSLog(@"count %d",[thumbArrary count]);
+    if (bound>3){
+        bound= 3;
+    }
+    mainScrollView.contentSize = CGSizeMake((mainScrollView.frame.size.width) *bound, mainScrollView.frame.size.height);
+    
+    [mainScrollView removeConstraint:webBrowserLeftConstraint];
+    webBrowserLeftConstraint = [NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:pageIndex+1]  attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
+    [mainScrollView addConstraint:webBrowserLeftConstraint];
+    [mainScrollView updateConstraintsIfNeeded];
+    
+    [mainScrollView scrollRectToVisible: [mainScrollView viewWithTag:pageIndex+1].frame animated:NO];
+    [((UIImageView*)[mainScrollView viewWithTag:pageIndex+1]) bringToFront];
+    if (pageIndex>0) {
+        ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).hidden=NO;
+//        [ ((UIImageView*)[mainScrollView viewWithTag:pageIndex]) bringToFront];
+        ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).image= [UIImage imageWithContentsOfFile:[thumbArrary objectAtIndex:currentPageIndex-1]];
+    }
+    if (bound>(pageIndex+1)) {
+        ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).hidden=NO;
+//        [((UIImageView*)[mainScrollView viewWithTag:pageIndex+2] )bringToFront];
+        ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).image = [UIImage imageWithContentsOfFile:[thumbArrary objectAtIndex:currentPageIndex+1]];
+    }
+    webBrowser.alpha = 0.0f;
+}
+
+-(int) actualPageIndex{
+    int pageIndex=currentPageIndex;
+    int bound =[thumbArrary count];
+    if ((pageIndex+1)>=bound && bound>2) {
+        pageIndex=2;
+    }else if (pageIndex>1) {
+        pageIndex=1;
+    }
+    return pageIndex;
+}
+
 -(void) updateButtons
 {
     self.forward.enabled = webBrowser.canGoForward;
