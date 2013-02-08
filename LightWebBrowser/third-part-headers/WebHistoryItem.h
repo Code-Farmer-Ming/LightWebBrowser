@@ -15,14 +15,14 @@
 - (void)setViewState:(id)arg1;
 - (id)alternateTitle;
 - (id)target;
-- (id)URL;
+- (NSURL*)URL;
 - (id)description;
 - (unsigned int)hash;
 - (BOOL)isEqual:(id)arg1;
 - (id)copyWithZone:(NSZone*)arg1;
 - (void)dealloc;
 - (id)init;
-- (id)URLString;
+- (NSString*)URLString;
 - (id)dictionaryRepresentation;
 - (CGPoint)_scrollPoint;
 - (void)_setViewportArguments:(id)arg1;

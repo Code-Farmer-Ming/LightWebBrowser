@@ -14,9 +14,6 @@ typedef NS_ENUM(NSInteger, GoButtonType) {
     GoBtuttonTypeStop,
 };
 @interface GoButton : UIButton
-    @property GoButtonType  currentType;
-    @property (strong, nonatomic)  UIImage*  goImage ;
-    @property (strong, nonatomic)  UIImage*  seachImage ;
-    @property (strong, nonatomic)  UIImage*  reloadImage ;
-    @property (strong, nonatomic)  UIImage*  stopImage ;
+@property (setter=setCurrentType:) GoButtonType  currentType;
+
 @end

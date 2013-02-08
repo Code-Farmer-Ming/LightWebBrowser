@@ -16,7 +16,7 @@
    return [paths  lastObject];
 }
 
-+(NSString*) filePathName: (NSString*) fileName
++(NSString*) cacheFilePathName: (NSString*) fileName
 {
     return [[DirectoryHelper cacheDirectory] stringByAppendingPathComponent:fileName];
      

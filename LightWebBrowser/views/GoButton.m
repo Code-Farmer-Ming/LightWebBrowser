@@ -7,17 +7,29 @@
 //
 
 #import "GoButton.h"
+@interface GoButton()
+
+    @property (strong, nonatomic)  UIImage*  goImage ;
+    @property (strong, nonatomic)  UIImage*  seachImage ;
+    @property (strong, nonatomic)  UIImage*  reloadImage ;
+    @property (strong, nonatomic)  UIImage*  stopImage ;
+@end
 
 @implementation GoButton
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if(self = [super initWithCoder:aDecoder]) {
         // Initialization code
+        self.goImage =  [UIImage imageNamed:@"go.png"];
+        self.seachImage =  [UIImage imageNamed:@"search.png"];
+        self.reloadImage =  [UIImage imageNamed:@"reload.png"];
+        self.stopImage =  [UIImage imageNamed:@"stop.png"];
+        self.currentType = GoBtuttonTypeGo;
+
     }
     return self;
 }
+ 
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -28,9 +40,31 @@
 }
 */
 
--(void) setType
+-(void)setCurrentType:(GoButtonType)value
 {
-    self.imageView.image =  self.goImage;
+     _currentType =  value;
+    [self updateImg];
+}
+
+-(void) updateImg
+{
+    UIImage *img;
+    switch (self.currentType)
+    {
+        case GoBtuttonTypeReload:
+            img = self.reloadImage;
+            break;
+        case GoBtuttonTypeSeach:
+            img = self.seachImage;
+            break;
+        case GoBtuttonTypeStop:
+            img = self.stopImage;
+            break;
+        default:
+            img = self.goImage;
+            break;
+    };
+    [self setImage:img forState:UIControlStateNormal];
 }
 
 @end

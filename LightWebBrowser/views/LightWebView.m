@@ -50,9 +50,12 @@
 
 -(NSString *) captureFilePath
 {
-  return [DirectoryHelper filePathName:[[[self.request URL] absoluteString] toMD5] ]  ;
+  return [self captureFilePath: [[[self.request URL] absoluteString] toMD5] ]  ;
 }
-
+-(NSString *) captureFilePath: (NSString*)fileName
+{
+    return [DirectoryHelper cacheFilePathName:fileName]  ;
+}
  
 -(void)loadRequestFromString: (NSString*)urlString
 {

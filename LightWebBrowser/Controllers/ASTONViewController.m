@@ -12,19 +12,20 @@
 #import "NSString+toMD5.h"
 #import "NSURLRequest+Extension.h"
 #import "UIView+Extension.h"
-
-
+#import "WebHistoryItem.h"
+#import "WebBackForwardList.h"
+#import "GoButton.h"
 @interface ASTONViewController ()
 {
     LightWebView *webBrowser;
     UIScrollView *mainScrollView;
-    NSMutableArray *thumbArrary;
-    int currentPageIndex;
+    
     NSLayoutConstraint *webBrowserLeftConstraint;
 }
+
     @property (weak, nonatomic) IBOutlet UIButton *reload;
     
-    @property (weak, nonatomic) IBOutlet UIButton *go;
+    @property (weak, nonatomic) IBOutlet GoButton *go;
    
     @property (weak, nonatomic) IBOutlet UIButton *stop;
 
@@ -37,6 +38,10 @@
  
 
     @property (weak, nonatomic) IBOutlet UIView *toolbar;
+ 
+- (IBAction)textEditChanged:(UITextField *)sender;
+- (IBAction)editBegin:(id)sender;
+- (IBAction)editEnd:(id)sender;
 
 @end
 
@@ -50,7 +55,7 @@ const float   TOOLBAR_HEIGHT = 44;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    currentPageIndex =0;
+ 
 	// Do any additional setup after loading the view, typically from a nib.
     mainScrollView = [UIScrollView new];
     mainScrollView.translatesAutoresizingMaskIntoConstraints=NO;
@@ -74,9 +79,13 @@ const float   TOOLBAR_HEIGHT = 44;
     [tmpConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|[_toolbar(%f)][mainScrollView]|",TOOLBAR_HEIGHT ]  options:0 metrics:nil views:NSDictionaryOfVariableBindings(mainScrollView,_toolbar)]];
     
     [self.view addConstraints:tmpConstraints];
-    
+    UIButton *seach = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 44, 44)];
+    self.addressField.rightViewMode = UITextFieldViewModeAlways;
+    [self.addressField.rightView addSubview:self.go];
+    [self.toolbar addSubview:seach];
     //    [webBrowser loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
-    
+ 
+  
     UIImageView *thumbImage;
     for (int i=1; i<4; i++) {
         thumbImage = [UIImageView new];
@@ -97,25 +106,22 @@ const float   TOOLBAR_HEIGHT = 44;
 
     }
     //设置webbrowser的位置
-    [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0]];
+    [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:0]  attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0]];
     [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
     [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem: [mainScrollView viewWithTag:1]   attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
     
     webBrowserLeftConstraint = [NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
     [mainScrollView addConstraint:webBrowserLeftConstraint];
-
+    
     
     //    thumbImage = nil;
     [self updateButtons];
-    thumbArrary = [[NSMutableArray alloc] init];
-    [self adjustScrollAndContent];
-    currentPageIndex =-1;
- 
-    NSLog(@"constraint %d", [mainScrollView.constraints count]);
-    NSLog(@"%@", mainScrollView.constraints);
-    
-}
 
+    NSLog(@"%@",mainScrollView.constraints);
+ 
+   [self adjustScrollAndContent];
+}
+ 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [self adjustScrollAndContent];
@@ -136,87 +142,67 @@ const float   TOOLBAR_HEIGHT = 44;
         yy = self.toolbar.frame.size.height;
         [self.toolbar setFrame:CGRectMake(0,-yy, self.toolbar.frame.size.width,self.toolbar.frame.size.height)] ;
         [mainScrollView setFrame:CGRectMake(mainScrollView.frame.origin.x,self.toolbar.frame.size.height-yy, mainScrollView.frame.size.width,mainScrollView.frame.size.height+self.toolbar.frame.size.height-yy)] ;
+        [self.view layoutSubviews];
+    }
+    else
+    {
+       
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    if (scrollView!=mainScrollView) {
+     if (scrollView!=mainScrollView) {
         return;
     }
     int page =   floor(scrollView.contentOffset.x / scrollView.frame.size.width);
-    NSLog(@" current page %d",page);
+    NSLog(@" current page %d ,actual page index %d",page, [self actualPageIndex]);
     int actualPageIndex = [self actualPageIndex];
     if (page==actualPageIndex) {
         return;
     }
-    if (page<actualPageIndex){	
+    if (page<actualPageIndex){
        [webBrowser goBack];
-        currentPageIndex--;
     }
     else
     {
-        [webBrowser goForward];
-        currentPageIndex++;
+       [webBrowser goForward];
     }
-   [self adjustScrollAndContent];
 }
 #pragma mark uiwebview委托
 - (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-//    [self updateAddress :request];
-    NSLog(@"navigationType %d",navigationType);
-    
-
-    if (navigationType!=UIWebViewNavigationTypeBackForward && !request.isFromFrameLoading) {
-//             if ([thumbArrary count]> (currentPageIndex+1)) {
-//                [thumbArrary removeObjectsInRange:NSMakeRange(currentPageIndex, [thumbArrary count])];
-//            }
-        NSLog(@"url scheme: %@",[[request URL] scheme]);
-        NSLog(@"temp path : %@",   [DirectoryHelper filePathName:[[[request mainDocumentURL] absoluteString] toMD5]]);
-
-        currentPageIndex++;
-        [thumbArrary addObject: [DirectoryHelper filePathName:[[[request mainDocumentURL] absoluteString] toMD5]]];
-        [self adjustScrollAndContent] ;
-    }
+    [self updateAddress :request];
     return YES;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView{
    [self updateButtons];
-    
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     [self updateButtons];
-    [webBrowser saveCaptureToCacheFile];
-  
- 
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationDuration:0.5f];
-     webView.alpha = 1.0f;
-     [webView bringToFront];
-    [UIView commitAnimations];
-
-    
-    
-//    WebBackForwardList*  backList = [webBrowser backForwardList];
-//    NSLog(@"%@", backList);
-//    NSLog(@"lenght %@",  [backList  currentItem]);
-    NSLog(@"finished");
-
-}
-
-
--  (id)webView:(id)sender createWebViewWithRequest:(id)arg2 windowFeatures:(id)arg3{
-    
-    return sender;
-}
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    [self updateButtons];
    
-    [webBrowser loadHTMLString:[NSString stringWithFormat:@"<h1>%d</h1><h1>%@</h1>",[error code],[error localizedDescription]] baseURL:[NSURL URLWithString:@"about:blank"] ];
-    NSLog(@"错误 domain %@, code %d, localizedDescription %@,localizedFailureReason %@",[error domain],[error code],[error localizedDescription],[error localizedFailureReason]);
+    
+    [self adjustScrollAndContent] ;
+//    WebBackForwardList*  backList = [webBrowser backForwardList];
+    NSLog(@"finished");
+//    NSLog(@"lenght %@",  [backList  currentItem]);
+  
+
 }
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+
+    NSLog(@"错误 domain %@, code %d, localizedDescription %@,localizedFailureReason %@",[error domain],[error code],[error localizedDescription],[error localizedFailureReason]);
+
+   if ([error code] != NSURLErrorCancelled)
+   {
+    [webBrowser loadHTMLString:[NSString stringWithFormat:@"<h1>%d</h1><h1>%@</h1>",[error code],[error localizedDescription]] baseURL:[NSURL URLWithString:@"about:blank"] ];
+    }
+    [self updateButtons];
+    
+    [self adjustScrollAndContent] ;
+    
+    }
 #pragma mark 输入框委托
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
@@ -225,14 +211,28 @@ const float   TOOLBAR_HEIGHT = 44;
 }
 
 #pragma mark 可视化组件事件
-- (IBAction)go:(UIButton *)sender {
-    [webBrowser loadRequestFromString: self.addressField.text];
+- (IBAction)go:(GoButton *)sender {
+    switch (sender.currentType) {
+        case GoBtuttonTypeGo:
+            [webBrowser loadRequestFromString: self.addressField.text];
+            break;
+        case GoBtuttonTypeReload:
+            [webBrowser reload];
+            break;
+        case GoBtuttonTypeStop:
+            [webBrowser stopLoading];
+            break;
+        default:
+//            [webBrowser stopLoading];
+//查找
+            break;
+    }
+    
 }
 
 - (IBAction)reload:(id)sender {
     [webBrowser reload];
 }
- 
 
 -(IBAction)stop:(id)sender{
     [webBrowser stopLoading];
@@ -245,40 +245,74 @@ const float   TOOLBAR_HEIGHT = 44;
 - (IBAction)forWard:(UIButton *)sender {
     [webBrowser goForward];
 }
+-(void)encodeRestorableStateWithCoder:(NSCoder *)coder
 
+{
+    
+    [super encodeRestorableStateWithCoder:coder];
+    
+    [coder encodeObject:self.addressField.text forKey:@"<#string#>"];
+    
+}
+
+
+
+-(void)decodeRestorableStateWithCoder:(NSCoder *)coder
+
+{
+    
+    [super decodeRestorableStateWithCoder:coder];
+    
+    self.addressField.text = [coder decodeObjectForKey:@"<#string#>"];
+    
+}
 #pragma mark 私有方法
 -(void)adjustScrollAndContent{
-    int bound =[thumbArrary count];
+    
+    int bound = [[webBrowser backForwardList] backListCount] + [[webBrowser backForwardList] forwardListCount]+1;
     int pageIndex= [self actualPageIndex];
-    NSLog(@"count %d",[thumbArrary count]);
+    NSLog(@"当前页面 %@",webBrowser.backForwardList.currentItem);
     if (bound>3){
         bound= 3;
     }
+ 
+    webBrowser.alpha = 0.0f;
     mainScrollView.contentSize = CGSizeMake((mainScrollView.frame.size.width) *bound, mainScrollView.frame.size.height);
     
     [mainScrollView removeConstraint:webBrowserLeftConstraint];
-    webBrowserLeftConstraint = [NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:pageIndex+1]  attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
+    UIView* currentPage = [mainScrollView viewWithTag:pageIndex+1];
+    webBrowserLeftConstraint = [NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:currentPage  attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
     [mainScrollView addConstraint:webBrowserLeftConstraint];
     [mainScrollView updateConstraintsIfNeeded];
     
-    [mainScrollView scrollRectToVisible: [mainScrollView viewWithTag:pageIndex+1].frame animated:NO];
-    [((UIImageView*)[mainScrollView viewWithTag:pageIndex+1]) bringToFront];
+    [mainScrollView scrollRectToVisible: CGRectMake(currentPage.frame.origin.x-PAGE_CONTENT_INSET, currentPage.frame.origin.y, currentPage.frame.size.width+PAGE_CONTENT_INSET, currentPage.frame.size.height)  animated:NO];
+    
     if (pageIndex>0) {
         ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).hidden=NO;
-//        [ ((UIImageView*)[mainScrollView viewWithTag:pageIndex]) bringToFront];
-        ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).image= [UIImage imageWithContentsOfFile:[thumbArrary objectAtIndex:currentPageIndex-1]];
+         ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).image= [UIImage imageWithContentsOfFile:[webBrowser  captureFilePath:[[[[webBrowser backForwardList] backItem] URLString] toMD5]]];
     }
     if (bound>(pageIndex+1)) {
         ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).hidden=NO;
-//        [((UIImageView*)[mainScrollView viewWithTag:pageIndex+2] )bringToFront];
-        ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).image = [UIImage imageWithContentsOfFile:[thumbArrary objectAtIndex:currentPageIndex+1]];
+ 
+        ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).image = [UIImage imageWithContentsOfFile:[webBrowser  captureFilePath:[[[[webBrowser backForwardList] forwardItem] URLString] toMD5] ]];
     }
-    webBrowser.alpha = 0.0f;
+    
+    
+    [UIView beginAnimations:nil context:UIGraphicsGetCurrentContext()];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:1.0];
+    webBrowser.alpha = 1.0f;
+    [UIView commitAnimations];
+    [webBrowser saveCaptureToCacheFile];
+    
+    [webBrowser bringToFront];
 }
 
 -(int) actualPageIndex{
-    int pageIndex=currentPageIndex;
-    int bound =[thumbArrary count];
+    int pageIndex=[[webBrowser backForwardList] backListCount];
+//    NSLog(@"当前页面%d",pageIndex);
+    int bound = [[webBrowser backForwardList] backListCount] + [[webBrowser backForwardList] forwardListCount]+1;
+//       NSLog(@"总页面%d",bound);
     if ((pageIndex+1)>=bound && bound>2) {
         pageIndex=2;
     }else if (pageIndex>1) {
@@ -289,11 +323,12 @@ const float   TOOLBAR_HEIGHT = 44;
 
 -(void) updateButtons
 {
-    self.forward.enabled = webBrowser.canGoForward;
-    self.back.enabled = webBrowser.canGoBack;
-    self.stop.hidden = !webBrowser.loading;
-    self.reload.hidden = webBrowser.loading;
+  
+    self.go.currentType = webBrowser.loading ? GoBtuttonTypeStop : GoBtuttonTypeReload;
+   
     [UIApplication sharedApplication].networkActivityIndicatorVisible = webBrowser.loading;
+//    mainScrollView.scrollEnabled = ! webBrowser.loading;
+   
 }
 
 - (void) updateAddress:(NSURLRequest*)request
@@ -301,6 +336,20 @@ const float   TOOLBAR_HEIGHT = 44;
     NSURL* url = [request mainDocumentURL];
     NSString* absoluteString = [url absoluteString];
     self.addressField.text = absoluteString;
+    url= nil;
 }
 
+- (IBAction)textEditChanged:(UITextField *)sender {
+     NSURL *url = [NSURL URLWithString: sender.text];
+    NSLog(@"url %d",url.isFileReferenceURL);
+    self.go.currentType = url.host ? GoBtuttonTypeGo : GoBtuttonTypeSeach;
+}
+
+- (IBAction)editBegin:(id)sender {
+    self.addressField.borderStyle = UITextBorderStyleRoundedRect;
+}
+
+- (IBAction)editEnd:(id)sender {
+    self.addressField.borderStyle = UITextBorderStyleBezel;
+}
 @end

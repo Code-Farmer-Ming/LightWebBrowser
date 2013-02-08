@@ -19,6 +19,7 @@
 -(NSString *) saveCaptureToCacheFile;
 
 -(NSString *) captureFilePath;
+-(NSString *) captureFilePath: (NSString*)fileName;
 
 -(void)loadRequestFromString: (NSString*)urlString;
 - (WebBackForwardList*) backForwardList;
