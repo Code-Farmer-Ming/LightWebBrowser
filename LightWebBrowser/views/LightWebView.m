@@ -33,16 +33,22 @@
 }
 
 -(UIImage*)captureScreen{
-    UIGraphicsBeginImageContext(self.bounds.size);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return viewImage;
-}
+    if (UIGraphicsGetCurrentContext()) {
+        UIGraphicsBeginImageContext(self.bounds.size);
+        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return viewImage;
+
+    }
+    else
+        return nil;
+   }
 
 -(NSString *)saveCaptureToCacheFile
 {
     NSString* cacheFilePath = self.captureFilePath;
+    NSLog(@"captureFile %@",cacheFilePath);
     NSData* imageData = UIImagePNGRepresentation(self.captureScreen);
     [imageData writeToFile:cacheFilePath atomically:YES];
     return cacheFilePath;
@@ -68,6 +74,16 @@
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
     [self loadRequest:urlRequest];
 }
+
+-(NSString*) title
+{
+    return  [self stringByEvaluatingJavaScriptFromString:@"document.title"];
+}
+-(NSString*) url
+{
+    return  [[[self request] URL] absoluteString];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

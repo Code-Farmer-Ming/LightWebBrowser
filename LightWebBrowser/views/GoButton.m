@@ -25,6 +25,7 @@
         self.reloadImage =  [UIImage imageNamed:@"reload.png"];
         self.stopImage =  [UIImage imageNamed:@"stop.png"];
         self.currentType = GoBtuttonTypeGo;
+      
 
     }
     return self;

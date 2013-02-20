@@ -5,7 +5,7 @@
 //  Created by 明 on 12-12-19.
 //  Copyright (c) 2012年 明. All rights reserved.
 //
-
+#import "ASTONAppDelegate.h"
 #import "ASTONViewController.h"
 #import "LightWebView.h"
 #import "DirectoryHelper.h"
@@ -15,13 +15,20 @@
 #import "WebHistoryItem.h"
 #import "WebBackForwardList.h"
 #import "GoButton.h"
+#import "CustomTextField.h"
+#import "AutoCompleteView.h"
+#import "QuartzCore/QuartzCore.h"
+#import "HistoryItem+extension.h"
+#import "HistoryItem.h"
+
 @interface ASTONViewController ()
 {
     LightWebView *webBrowser;
     UIScrollView *mainScrollView;
-    
+    AutoCompleteView* autoComplete;
     NSLayoutConstraint *webBrowserLeftConstraint;
 }
+    @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
     @property (weak, nonatomic) IBOutlet UIButton *reload;
     
@@ -29,7 +36,7 @@
    
     @property (weak, nonatomic) IBOutlet UIButton *stop;
 
-    @property (weak, nonatomic) IBOutlet UITextField *addressField;
+    @property (weak, nonatomic) IBOutlet CustomTextField *addressField;
     @property (weak, nonatomic) IBOutlet UIScrollView *webScrollView;
 
     @property (weak, nonatomic) IBOutlet UIButton *back;
@@ -55,7 +62,9 @@ const float   TOOLBAR_HEIGHT = 44;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
- 
+    
+    self.managedObjectContext = [(ASTONAppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
 	// Do any additional setup after loading the view, typically from a nib.
     mainScrollView = [UIScrollView new];
     mainScrollView.translatesAutoresizingMaskIntoConstraints=NO;
@@ -79,10 +88,21 @@ const float   TOOLBAR_HEIGHT = 44;
     [tmpConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|[_toolbar(%f)][mainScrollView]|",TOOLBAR_HEIGHT ]  options:0 metrics:nil views:NSDictionaryOfVariableBindings(mainScrollView,_toolbar)]];
     
     [self.view addConstraints:tmpConstraints];
-    UIButton *seach = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 44, 44)];
-    self.addressField.rightViewMode = UITextFieldViewModeAlways;
-    [self.addressField.rightView addSubview:self.go];
-    [self.toolbar addSubview:seach];
+    
+    UIButton *seach = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    [seach setImage:[UIImage imageNamed:@"page"] forState:UIControlStateNormal];
+    seach.frame= CGRectMake(0, 0, 16, 16);
+    self.addressField.leftViewMode = UITextFieldViewModeAlways;
+     
+     self.addressField.leftView =seach ;
+    
+    
+    seach= nil;
+    
+    autoComplete = [[AutoCompleteView alloc] init:self.addressField];
+    autoComplete.autocompleteUrls = [HistoryItem seachByTitleOrUrl:@"so" manageObjectContext:[self managedObjectContext]];
+    [self.view addSubview:autoComplete];
     //    [webBrowser loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
  
   
@@ -117,8 +137,7 @@ const float   TOOLBAR_HEIGHT = 44;
     //    thumbImage = nil;
     [self updateButtons];
 
-    NSLog(@"%@",mainScrollView.constraints);
- 
+       
    [self adjustScrollAndContent];
 }
  
@@ -162,7 +181,11 @@ const float   TOOLBAR_HEIGHT = 44;
         return;
     }
     if (page<actualPageIndex){
-       [webBrowser goBack];
+        if ([webBrowser canGoBack]) {
+                 [webBrowser goBack];
+            [webBrowser bringToFront];
+        }
+  
     }
     else
     {
@@ -178,12 +201,15 @@ const float   TOOLBAR_HEIGHT = 44;
 - (void)webViewDidStartLoad:(UIWebView *)webView{
    [self updateButtons];
 }
-- (void)webViewDidFinishLoad:(UIWebView *)webView{
+- (void)webViewDidFinishLoad:(LightWebView *)webView{
     [self updateButtons];
-   
-    
+ 
     [self adjustScrollAndContent] ;
 //    WebBackForwardList*  backList = [webBrowser backForwardList];
+         NSLog(@"loading %@",[[webView.request URL] absoluteString]);
+  
+   
+    [[HistoryItem alloc] initWithTitle:[webView title] url:[webView url] manageObjectContext:[self managedObjectContext]];
     NSLog(@"finished");
 //    NSLog(@"lenght %@",  [backList  currentItem]);
   
@@ -276,7 +302,7 @@ const float   TOOLBAR_HEIGHT = 44;
         bound= 3;
     }
  
-    webBrowser.alpha = 0.0f;
+//    webBrowser.alpha = 0.0f;
     mainScrollView.contentSize = CGSizeMake((mainScrollView.frame.size.width) *bound, mainScrollView.frame.size.height);
     
     [mainScrollView removeConstraint:webBrowserLeftConstraint];
@@ -290,19 +316,21 @@ const float   TOOLBAR_HEIGHT = 44;
     if (pageIndex>0) {
         ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).hidden=NO;
          ((UIImageView*)[mainScrollView viewWithTag:pageIndex]).image= [UIImage imageWithContentsOfFile:[webBrowser  captureFilePath:[[[[webBrowser backForwardList] backItem] URLString] toMD5]]];
+        [((UIImageView*)[mainScrollView viewWithTag:pageIndex]) bringToFront];
     }
     if (bound>(pageIndex+1)) {
         ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).hidden=NO;
- 
+        [((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]) bringToFront];
         ((UIImageView*)[mainScrollView viewWithTag:pageIndex+2]).image = [UIImage imageWithContentsOfFile:[webBrowser  captureFilePath:[[[[webBrowser backForwardList] forwardItem] URLString] toMD5] ]];
+        
     }
     
     
-    [UIView beginAnimations:nil context:UIGraphicsGetCurrentContext()];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationDuration:1.0];
-    webBrowser.alpha = 1.0f;
-    [UIView commitAnimations];
+//    [UIView beginAnimations:nil context:UIGraphicsGetCurrentContext()];
+//    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//    [UIView setAnimationDuration:1.0];
+//    webBrowser.alpha = 1.0f;
+//    [UIView commitAnimations];
     [webBrowser saveCaptureToCacheFile];
     
     [webBrowser bringToFront];
@@ -328,7 +356,7 @@ const float   TOOLBAR_HEIGHT = 44;
    
     [UIApplication sharedApplication].networkActivityIndicatorVisible = webBrowser.loading;
 //    mainScrollView.scrollEnabled = ! webBrowser.loading;
-   
+    [self updateAddress :webBrowser.request];
 }
 
 - (void) updateAddress:(NSURLRequest*)request
@@ -340,9 +368,8 @@ const float   TOOLBAR_HEIGHT = 44;
 }
 
 - (IBAction)textEditChanged:(UITextField *)sender {
-     NSURL *url = [NSURL URLWithString: sender.text];
-    NSLog(@"url %d",url.isFileReferenceURL);
-    self.go.currentType = url.host ? GoBtuttonTypeGo : GoBtuttonTypeSeach;
+     
+    self.go.currentType = sender.text.isURL ? GoBtuttonTypeGo : GoBtuttonTypeSeach;
 }
 
 - (IBAction)editBegin:(id)sender {
@@ -350,6 +377,11 @@ const float   TOOLBAR_HEIGHT = 44;
 }
 
 - (IBAction)editEnd:(id)sender {
-    self.addressField.borderStyle = UITextBorderStyleBezel;
+    
+     self.addressField.layer.cornerRadius=8.0f;
+     self.addressField.layer.masksToBounds=NO;
+     self.addressField.backgroundColor=[UIColor whiteColor];
+     self.addressField.layer.borderColor=[[UIColor grayColor]CGColor];
+     self.addressField.layer.borderWidth= 1.0f;
 }
 @end

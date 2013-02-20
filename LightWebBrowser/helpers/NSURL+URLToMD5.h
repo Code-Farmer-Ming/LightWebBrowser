@@ -1,5 +1,5 @@
 //
-//  NSString+toMD5.h
+//  NSURL+URLToMD5.h
 //  LightWebBrowser
 //
 //  Created by 明 on 13-1-8.
@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (toMD5)
--(NSString*) toMD5;
--(BOOL) isURL;
+@interface NSURL (URLToMD5)
+
 @end

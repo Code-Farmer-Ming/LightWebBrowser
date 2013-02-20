@@ -22,4 +22,10 @@
       return  output;
 }
 
+-(BOOL)isURL
+{
+    NSString *urlRegEx =  @"(http(s)?://|)([\\w-]+\\.)+[\\w-]{2,}([\\w- ./?%&amp;=]*)?";
+    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+    return [urlTest evaluateWithObject:self];
+}
 @end

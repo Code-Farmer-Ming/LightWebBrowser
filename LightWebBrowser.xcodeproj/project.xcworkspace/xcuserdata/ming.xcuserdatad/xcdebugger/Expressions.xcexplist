@@ -3,18 +3,96 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[ASTONViewController go:]:ASTONViewController.m">
+         contextName = "-[AutoCompleteView tableView:cellForRowAtIndexPath:]:AutoCompleteView.m">
          <PersistentStrings>
             <PersistentString
-               value = "self.addressField.text">
+               value = "indexPath.row">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[CustomToolbar drawRect:]:CustomToolbar.m">
+         contextName = "-[ASTONViewController webViewDidFinishLoad:]:ASTONViewController.m">
          <PersistentStrings>
             <PersistentString
-               value = "rect">
+               value = "self.addressField.title">
+            </PersistentString>
+            <PersistentString
+               value = "[webBrowser backForwardList]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController adjustScrollAndContent]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[mainScrollView viewWithTag:pageIndex-1]">
+            </PersistentString>
+            <PersistentString
+               value = "[webBrowser.backForwardList currentItem]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController actualPageIndex]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "scrollView.contentOffset.x">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController scrollViewDidEndDecelerating:]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "scrollView.frame.size.width">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[GoButton updateImg]:GoButton.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "_currentType">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[LightWebView saveCaptureToCacheFile]:LightWebView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "cacheFilePath">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[LightWebView captureFilePath]:LightWebView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[self.request URL]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AutoCompleteView tableView:numberOfRowsInSection:]:AutoCompleteView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.autocompleteUrls.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController updateButtons]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.go.currentType">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController viewWillLayoutSubviews]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.view.frame.size.width">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -23,6 +101,46 @@
          <PersistentStrings>
             <PersistentString
                value = "[error domain]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController webView:shouldStartLoadWithRequest:navigationType:]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[thumbArrary count]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController viewDidLoad]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[self.go titleLabel].text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController go:]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.addressField.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ASTONViewController forWard:]:ASTONViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "webBrowser.canForward">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CustomToolbar drawRect:]:CustomToolbar.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "rect">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

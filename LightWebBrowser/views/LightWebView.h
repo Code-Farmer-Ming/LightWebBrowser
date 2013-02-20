@@ -23,4 +23,7 @@
 
 -(void)loadRequestFromString: (NSString*)urlString;
 - (WebBackForwardList*) backForwardList;
+-(NSString*) title;
+-(NSString*) url;
+
 @end
