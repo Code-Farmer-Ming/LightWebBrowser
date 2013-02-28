@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol AutoCompleteItemDelegate <NSObject>
+@optional
+    -(void) clickItem:(NSDictionary*)item;
+@end
 
 @interface AutoCompleteView : UIView<UITableViewDelegate, UITableViewDataSource>
-    @property   (strong,nonatomic) NSArray *autocompleteUrls;
+    @property   (strong,nonatomic,setter = setAutoCompleteUrls:) NSArray *autocompleteUrls;
     @property   (weak,nonatomic)UITextField *inputField;
-
+    @property   (weak,nonatomic)id<AutoCompleteItemDelegate> delegate;
     - (id)init:(UITextField*) inputField;
 @end

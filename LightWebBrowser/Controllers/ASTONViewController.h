@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface ASTONViewController : UIViewController <UIWebViewDelegate, UIScrollViewDelegate>
-
+#import "AutoCompleteView.h"
+#import "KLNoteViewController.h"
+@interface ASTONViewController : UIViewController <UIWebViewDelegate, UIScrollViewDelegate,AutoCompleteItemDelegate,ControlViewData>
+ 
 @end

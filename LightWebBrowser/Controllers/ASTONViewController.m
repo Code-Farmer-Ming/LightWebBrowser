@@ -20,6 +20,7 @@
 #import "QuartzCore/QuartzCore.h"
 #import "HistoryItem+extension.h"
 #import "HistoryItem.h"
+#import "BackForwardItem.h"
 
 @interface ASTONViewController ()
 {
@@ -49,6 +50,7 @@
 - (IBAction)textEditChanged:(UITextField *)sender;
 - (IBAction)editBegin:(id)sender;
 - (IBAction)editEnd:(id)sender;
+- (IBAction)logTouchUp:(UIButton *)sender;
 
 @end
 
@@ -64,7 +66,7 @@ const float   TOOLBAR_HEIGHT = 44;
     [super viewDidLoad];
     
     self.managedObjectContext = [(ASTONAppDelegate*)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    
+  
 	// Do any additional setup after loading the view, typically from a nib.
     mainScrollView = [UIScrollView new];
     mainScrollView.translatesAutoresizingMaskIntoConstraints=NO;
@@ -95,13 +97,17 @@ const float   TOOLBAR_HEIGHT = 44;
     seach.frame= CGRectMake(0, 0, 16, 16);
     self.addressField.leftViewMode = UITextFieldViewModeAlways;
      
-     self.addressField.leftView =seach ;
-    
+    self.addressField.leftView =seach ;
+//    GoButton *gb =  [[GoButton alloc] init];
+//     
+//    gb.frame =CGRectMake(0, 0, 18, 18);
+//    self.addressField.rightView = gb;
+//    self.addressField.rightViewMode = UITextFieldViewModeAlways;
     
     seach= nil;
     
     autoComplete = [[AutoCompleteView alloc] init:self.addressField];
-    autoComplete.autocompleteUrls = [HistoryItem seachByTitleOrUrl:@"so" manageObjectContext:[self managedObjectContext]];
+    autoComplete.delegate = self;
     [self.view addSubview:autoComplete];
     //    [webBrowser loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baike.com"]] ] ;
  
@@ -126,7 +132,7 @@ const float   TOOLBAR_HEIGHT = 44;
 
     }
     //设置webbrowser的位置
-    [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:0]  attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0]];
+    [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0]];
     [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[mainScrollView viewWithTag:1]  attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
     [mainScrollView addConstraint:[NSLayoutConstraint constraintWithItem: webBrowser attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem: [mainScrollView viewWithTag:1]   attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
     
@@ -136,9 +142,7 @@ const float   TOOLBAR_HEIGHT = 44;
     
     //    thumbImage = nil;
     [self updateButtons];
-
-       
-   [self adjustScrollAndContent];
+    [self adjustScrollAndContent];
 }
  
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -208,8 +212,8 @@ const float   TOOLBAR_HEIGHT = 44;
 //    WebBackForwardList*  backList = [webBrowser backForwardList];
          NSLog(@"loading %@",[[webView.request URL] absoluteString]);
   
-   
-    [[HistoryItem alloc] initWithTitle:[webView title] url:[webView url] manageObjectContext:[self managedObjectContext]];
+     [HistoryItem createWithTitle: [webView title] url:[webView url]  manageObjectContext:self.managedObjectContext];
+     
     NSLog(@"finished");
 //    NSLog(@"lenght %@",  [backList  currentItem]);
   
@@ -232,12 +236,13 @@ const float   TOOLBAR_HEIGHT = 44;
 #pragma mark 输入框委托
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
-    [self go  :nil];
+    [self go  :self.go];
     return YES;
 }
 
 #pragma mark 可视化组件事件
 - (IBAction)go:(GoButton *)sender {
+    autoComplete.hidden = YES;
     switch (sender.currentType) {
         case GoBtuttonTypeGo:
             [webBrowser loadRequestFromString: self.addressField.text];
@@ -249,8 +254,8 @@ const float   TOOLBAR_HEIGHT = 44;
             [webBrowser stopLoading];
             break;
         default:
-//            [webBrowser stopLoading];
-//查找
+            //查找
+        [HistoryItem createWithTitle: @"" url:self.addressField.text  manageObjectContext:self.managedObjectContext];
             break;
     }
     
@@ -274,10 +279,14 @@ const float   TOOLBAR_HEIGHT = 44;
 -(void)encodeRestorableStateWithCoder:(NSCoder *)coder
 
 {
-    
-    [super encodeRestorableStateWithCoder:coder];
-    
-    [coder encodeObject:self.addressField.text forKey:@"<#string#>"];
+    NSMutableArray *mr = [NSMutableArray array ];
+       [super encodeRestorableStateWithCoder:coder];
+    for(int i= -(int)[webBrowser.backForwardList backListCount]; i < 1; i++)
+    {
+        [mr addObject: [BackForwardItem fromWebHistoryItem:[webBrowser.backForwardList itemAtIndex:i]] ] ;
+        
+    }
+    [coder encodeObject:mr forKey:@"backForwardList"];
     
 }
 
@@ -286,10 +295,34 @@ const float   TOOLBAR_HEIGHT = 44;
 -(void)decodeRestorableStateWithCoder:(NSCoder *)coder
 
 {
-    
+   
+
+   
     [super decodeRestorableStateWithCoder:coder];
+    NSMutableArray* currentBackForwardList =  [coder decodeObjectForKey:@"backForwardList"];
+    NSLog(@"xx:%@",currentBackForwardList);
+    id  newBackForwardList = webBrowser.backForwardList;
+    for(int i= 0; i < (int)[currentBackForwardList count]-1; i++)
+    {
+//        NSInvocation *inv = [NSInvocation invocationWithMethodSignature:[currentBackForwardList methodSignatureForSelector:@selector(itemAtIndex:)]];
+//        [inv setSelector:@selector(itemAtIndex:)];
+//        [inv setTarget:currentBackForwardList];
+//        [inv setArgument:&i atIndex:2]; //arguments 0 and 1 are self and _cmd respectively, automatically set by NSInvocation
+//        [inv invoke];
+//        
+//        
+//        NSUInteger length = [[inv methodSignature] methodReturnLength];
+//        void *someItem = ((void *)malloc(length));
+//        [inv getReturnValue:&someItem];
+        BackForwardItem* someItem = currentBackForwardList[i];
+        [ newBackForwardList performSelector:@selector(addItem:) withObject: [someItem toWebHistoryItem]];
+    }
     
-    self.addressField.text = [coder decodeObjectForKey:@"<#string#>"];
+    NSLog(@"list %@",webBrowser.backForwardList);
+    //Add the current item
+    BackForwardItem* currentItem = [currentBackForwardList lastObject];
+    [webBrowser loadRequestFromString:currentItem.url];
+    
     
 }
 #pragma mark 私有方法
@@ -370,6 +403,7 @@ const float   TOOLBAR_HEIGHT = 44;
 - (IBAction)textEditChanged:(UITextField *)sender {
      
     self.go.currentType = sender.text.isURL ? GoBtuttonTypeGo : GoBtuttonTypeSeach;
+    autoComplete.autocompleteUrls = [HistoryItem seachByTitleOrUrl:sender.text manageObjectContext:[self managedObjectContext]];
 }
 
 - (IBAction)editBegin:(id)sender {
@@ -383,5 +417,24 @@ const float   TOOLBAR_HEIGHT = 44;
      self.addressField.backgroundColor=[UIColor whiteColor];
      self.addressField.layer.borderColor=[[UIColor grayColor]CGColor];
      self.addressField.layer.borderWidth= 1.0f;
+}
+
+- (IBAction)logTouchUp:(UIButton *)sender {
+    NSLog(@"web frame %@",NSStringFromCGRect(mainScrollView.frame));
+      NSLog(@"mainScrollView.contentSize  %@",NSStringFromCGPoint(mainScrollView.contentOffset));
+    webBrowser.frame=CGRectMake(0, 0, 768, 960);
+}
+
+-(void)clickItem:(NSDictionary *)item
+{
+    self.addressField.text = [item objectForKey:@"url" ];
+    [self textEditChanged:self.addressField];
+    [self go  :self.go];
+    
+}
+
+-(UIView*)triggerView
+{
+    return  self.toolbar;
 }
 @end

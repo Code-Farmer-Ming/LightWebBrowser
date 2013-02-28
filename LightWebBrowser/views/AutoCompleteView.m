@@ -28,6 +28,7 @@
         self.layer.cornerRadius = 4;
         self.layer.shadowOffset = CGSizeMake(-5, 5);
         self.layer.shadowOpacity = 0.5;
+        self.layer.shadowRadius = 4;
         self.layer.borderWidth=1;
         self.layer.borderColor= [[UIColor grayColor] CGColor ];
         autocompleteTableView = [UITableView new];
@@ -43,8 +44,6 @@
       
         self.backgroundColor = [UIColor whiteColor];
         
-        NSLog(@"%@",self.constraints);
-        NSLog(@"%f",self.frame.size.width);
         [self.inputField addTarget:self action:@selector(editBegin) forControlEvents:UIControlEventEditingDidBegin];
         
                [self.inputField addTarget:self action:@selector(editEnd) forControlEvents:UIControlEventEditingDidEnd];
@@ -55,7 +54,9 @@
  
 -(void)editBegin
 {
+ 
     self.hidden=NO;
+  
     self.frame = CGRectMake(self.inputField.frame.origin.x, self.inputField.frame.origin.y+self.inputField.frame.size.height, self.inputField.frame.size.width, 160);
     autocompleteTableView.frame = self.bounds;
     [self bringToFront];
@@ -92,15 +93,22 @@
                  initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:AutoCompleteRowIdentifier];
     }
 
-    cell.textLabel.text =((HistoryItem*)self.autocompleteUrls[indexPath.row]).url ;
-    cell.detailTextLabel.text = ((HistoryItem*)self.autocompleteUrls[indexPath.row]).title;
+    cell.textLabel.text =[self.autocompleteUrls[indexPath.row] objectForKey:@"url"] ;
+    cell.detailTextLabel.text = [self.autocompleteUrls[indexPath.row] objectForKey:@"title"];
     return cell;
 }
 #pragma mark UITableViewDelegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-     
-    
+    self.hidden=YES;
+
+    [_delegate clickItem:self.autocompleteUrls[indexPath.row] ];
+}
+
+-(void)setAutoCompleteUrls:(NSArray*)value
+{
+    _autocompleteUrls = value;
+    [autocompleteTableView reloadData];
 }
 @end

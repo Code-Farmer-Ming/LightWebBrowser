@@ -12,5 +12,5 @@
 
 -(HistoryItem*) initWithTitle:(NSString*)title url:(NSString*)url manageObjectContext:(NSManagedObjectContext*)manageObjectContext;
 +(NSArray*) seachByTitleOrUrl:(NSString*) titleOrUrl manageObjectContext:(NSManagedObjectContext*) context;
-
++(void) createWithTitle:(NSString*)title url:(NSString*)url manageObjectContext:(NSManagedObjectContext*)manageObjectContext;
 @end

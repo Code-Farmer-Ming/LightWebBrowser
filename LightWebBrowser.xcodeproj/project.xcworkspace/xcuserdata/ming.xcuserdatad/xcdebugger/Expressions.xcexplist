@@ -3,6 +3,9 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "+[HistoryItem(extension) seachByTitleOrUrl:manageObjectContext:]:HistoryItem+extension.m">
+      </ContextState>
+      <ContextState
          contextName = "-[AutoCompleteView tableView:cellForRowAtIndexPath:]:AutoCompleteView.m">
          <PersistentStrings>
             <PersistentString
@@ -29,6 +32,14 @@
             </PersistentString>
             <PersistentString
                value = "[webBrowser.backForwardList currentItem]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[AutoCompleteView tableView:numberOfRowsInSection:]:AutoCompleteView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.autocompleteUrls.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -69,14 +80,6 @@
          <PersistentStrings>
             <PersistentString
                value = "[self.request URL]">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "-[AutoCompleteView tableView:numberOfRowsInSection:]:AutoCompleteView.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.autocompleteUrls.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -123,6 +126,9 @@
       <ContextState
          contextName = "-[ASTONViewController go:]:ASTONViewController.m">
          <PersistentStrings>
+            <PersistentString
+               value = "sender.currentType">
+            </PersistentString>
             <PersistentString
                value = "self.addressField.text">
             </PersistentString>

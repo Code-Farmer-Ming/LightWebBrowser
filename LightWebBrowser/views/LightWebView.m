@@ -33,8 +33,10 @@
 }
 
 -(UIImage*)captureScreen{
-    if (UIGraphicsGetCurrentContext()) {
+    
+    
         UIGraphicsBeginImageContext(self.bounds.size);
+    if (UIGraphicsGetCurrentContext()!=nil) {
         [self.layer renderInContext:UIGraphicsGetCurrentContext()];
         UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

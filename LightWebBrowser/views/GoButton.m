@@ -25,8 +25,22 @@
         self.reloadImage =  [UIImage imageNamed:@"reload.png"];
         self.stopImage =  [UIImage imageNamed:@"stop.png"];
         self.currentType = GoBtuttonTypeGo;
-      
+       
+   
+    }
+    return self;
+}
 
+-(id) init{
+    if(self = [super init]) {
+        // Initialization code
+        self.goImage =  [UIImage imageNamed:@"go.png"];
+        self.seachImage =  [UIImage imageNamed:@"search.png"];
+        self.reloadImage =  [UIImage imageNamed:@"reload.png"];
+        self.stopImage =  [UIImage imageNamed:@"stop.png"];
+        self.currentType = GoBtuttonTypeGo;
+        
+        
     }
     return self;
 }

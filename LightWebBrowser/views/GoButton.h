@@ -14,6 +14,6 @@ typedef NS_ENUM(NSInteger, GoButtonType) {
     GoBtuttonTypeStop,
 };
 @interface GoButton : UIButton
-@property (setter=setCurrentType:) GoButtonType  currentType;
+@property (nonatomic,setter=setCurrentType:) GoButtonType  currentType;
 
 @end
