@@ -189,7 +189,6 @@ const float   TOOLBAR_HEIGHT = 44;
                  [webBrowser goBack];
             [webBrowser bringToFront];
         }
-  
     }
     else
     {
@@ -207,17 +206,12 @@ const float   TOOLBAR_HEIGHT = 44;
 }
 - (void)webViewDidFinishLoad:(LightWebView *)webView{
     [self updateButtons];
- 
-    [self adjustScrollAndContent] ;
 //    WebBackForwardList*  backList = [webBrowser backForwardList];
-         NSLog(@"loading %@",[[webView.request URL] absoluteString]);
+    NSLog(@"loading %@",[[webView.request URL] absoluteString]);
   
-     [HistoryItem createWithTitle: [webView title] url:[webView url]  manageObjectContext:self.managedObjectContext];
-     
+    [HistoryItem createWithTitle: [webView title] url:[webView url]  manageObjectContext:self.managedObjectContext];
+         [self adjustScrollAndContent] ;
     NSLog(@"finished");
-//    NSLog(@"lenght %@",  [backList  currentItem]);
-  
-
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
@@ -277,7 +271,6 @@ const float   TOOLBAR_HEIGHT = 44;
     [webBrowser goForward];
 }
 -(void)encodeRestorableStateWithCoder:(NSCoder *)coder
-
 {
     NSMutableArray *mr = [NSMutableArray array ];
        [super encodeRestorableStateWithCoder:coder];
@@ -287,44 +280,26 @@ const float   TOOLBAR_HEIGHT = 44;
         
     }
     [coder encodeObject:mr forKey:@"backForwardList"];
-    
 }
 
 
 
 -(void)decodeRestorableStateWithCoder:(NSCoder *)coder
-
 {
-   
-
-   
     [super decodeRestorableStateWithCoder:coder];
     NSMutableArray* currentBackForwardList =  [coder decodeObjectForKey:@"backForwardList"];
     NSLog(@"xx:%@",currentBackForwardList);
     id  newBackForwardList = webBrowser.backForwardList;
     for(int i= 0; i < (int)[currentBackForwardList count]-1; i++)
     {
-//        NSInvocation *inv = [NSInvocation invocationWithMethodSignature:[currentBackForwardList methodSignatureForSelector:@selector(itemAtIndex:)]];
-//        [inv setSelector:@selector(itemAtIndex:)];
-//        [inv setTarget:currentBackForwardList];
-//        [inv setArgument:&i atIndex:2]; //arguments 0 and 1 are self and _cmd respectively, automatically set by NSInvocation
-//        [inv invoke];
-//        
-//        
-//        NSUInteger length = [[inv methodSignature] methodReturnLength];
-//        void *someItem = ((void *)malloc(length));
-//        [inv getReturnValue:&someItem];
         BackForwardItem* someItem = currentBackForwardList[i];
         [ newBackForwardList performSelector:@selector(addItem:) withObject: [someItem toWebHistoryItem]];
     }
-    
-    NSLog(@"list %@",webBrowser.backForwardList);
     //Add the current item
     BackForwardItem* currentItem = [currentBackForwardList lastObject];
     [webBrowser loadRequestFromString:currentItem.url];
-    
-    
 }
+
 #pragma mark 私有方法
 -(void)adjustScrollAndContent{
     
